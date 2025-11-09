@@ -1,0 +1,268 @@
+---
+import Heading from '@components/atoms/Heading/Heading.astro';
+import Text from '@components/atoms/Text/Text.astro';
+---
+
+<section class="stats-section" id="stats-section">
+  <div class="stats-section__container">
+    <div class="stats-section__grid">
+      <div class="stats-item" data-stat="5000">
+        <div class="stats-item__number" data-target="5000">
+          <span class="stats-item__value">0</span>
+          <span class="stats-item__suffix">K+</span>
+        </div>
+        <Text size="md" class="stats-item__label">Clientes Satisfechos</Text>
+      </div>
+
+      <div class="stats-item" data-stat="10">
+        <div class="stats-item__number" data-target="10">
+          <span class="stats-item__value">0</span>
+          <span class="stats-item__suffix">+</span>
+        </div>
+        <Text size="md" class="stats-item__label">Años Experiencia</Text>
+      </div>
+
+      <div class="stats-item" data-stat="4.9">
+        <div class="stats-item__number" data-target="4.9">
+          <span class="stats-item__value">0</span>
+          <span class="stats-item__suffix">★</span>
+        </div>
+        <Text size="md" class="stats-item__label">Valoración Media</Text>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Animación de conteo cuando la sección es visible
+  function animateStats() {
+    const statsSection = document.getElementById('stats-section');
+    if (!statsSection) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const statsItems = entry.target.querySelectorAll('.stats-item');
+            statsItems.forEach((item, index) => {
+              setTimeout(() => {
+                item.classList.add('stats-item--animate');
+                const numberElement = item.querySelector('.stats-item__number');
+                const targetAttr = numberElement?.getAttribute('data-target') || item.getAttribute('data-stat') || '0';
+                const target = parseFloat(targetAttr);
+                const valueElement = item.querySelector('.stats-item__value');
+                if (!valueElement) return;
+
+                const duration = 2000; // 2 segundos
+                const start = 0;
+                const increment = target / (duration / 16); // 60fps
+                let current = start;
+
+                const timer = setInterval(() => {
+                  current += increment;
+                  if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                  }
+
+                  if (target >= 1000) {
+                    // Para números grandes (5000), mostrar en miles
+                    valueElement.textContent = Math.floor(current / 1000).toString();
+                  } else if (target % 1 !== 0) {
+                    // Para decimales (4.9), mostrar con un decimal
+                    valueElement.textContent = current.toFixed(1);
+                  } else {
+                    // Para números normales (10)
+                    valueElement.textContent = Math.floor(current).toString();
+                  }
+                }, 16);
+              }, index * 200); // Delay escalonado
+            });
+
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(statsSection);
+  }
+
+  // Ejecutar cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', animateStats);
+  } else {
+    animateStats();
+  }
+</script>
+
+<style lang="scss">
+  @use '@styles/breakpoints' as *;
+
+  .stats-section {
+    padding: 8rem 0;
+    background-color: var(--color-white);
+    position: relative;
+    overflow: hidden;
+
+    @include tablet-medium {
+      padding: 10rem 0;
+    }
+
+    @include laptop-small {
+      padding: 12rem 0;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        135deg,
+        var(--color-gray-50) 0%,
+        var(--color-white) 50%,
+        var(--color-gray-50) 100%
+      );
+      opacity: 0.5;
+      z-index: 0;
+    }
+  }
+
+  .stats-section__container {
+    width: min(90%, 120rem);
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+
+    @include tablet-medium {
+      padding: 0 4rem;
+    }
+  }
+
+  .stats-section__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    align-items: center;
+    justify-items: center;
+
+    @include tablet-medium {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4rem;
+    }
+
+    @include laptop-small {
+      gap: 6rem;
+    }
+  }
+
+  .stats-item {
+    text-align: center;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+
+    &--animate {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @include tablet-medium {
+      padding: 2rem;
+    }
+  }
+
+  .stats-item__number {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-bottom: 1.6rem;
+    line-height: 1;
+  }
+
+  .stats-item__value {
+    font-size: 5.6rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-black);
+    font-family: var(--font-primary);
+    line-height: 1;
+    transition: transform 0.3s ease;
+
+    @include tablet-medium {
+      font-size: 6.4rem;
+    }
+
+    @include laptop-small {
+      font-size: 7.2rem;
+    }
+  }
+
+  .stats-item__suffix {
+    font-size: 4rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-black);
+    font-family: var(--font-primary);
+    line-height: 1;
+
+    @include tablet-medium {
+      font-size: 4.8rem;
+    }
+
+    @include laptop-small {
+      font-size: 5.6rem;
+    }
+  }
+
+  .stats-item__label {
+    color: var(--color-gray-600);
+    font-size: 1.6rem;
+    font-weight: var(--font-weight-medium);
+    margin: 0;
+    line-height: 1.5;
+
+    @include tablet-medium {
+      font-size: 1.8rem;
+    }
+
+    @include laptop-small {
+      font-size: 2rem;
+    }
+  }
+
+  .stats-item--animate .stats-item__value {
+    animation: pulse 0.5s ease;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  // Efecto hover en desktop
+  @media (hover: hover) {
+    .stats-item:hover .stats-item__value {
+      transform: scale(1.05);
+      color: var(--color-gray-900);
+      transition: all 0.3s ease;
+    }
+
+    .stats-item:hover .stats-item__suffix {
+      color: var(--color-gray-900);
+      transition: color 0.3s ease;
+    }
+  }
+</style>
+

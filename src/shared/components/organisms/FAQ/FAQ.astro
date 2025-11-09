@@ -1,0 +1,189 @@
+---
+import { ChevronDown } from 'lucide-astro';
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+const faqItems: FAQItem[] = [
+  {
+    question: "¿Cuál es el tiempo de envío?",
+    answer: "Enviamos en 24-48 horas. Los pedidos se entregan en 3-5 días hábiles en toda el país."
+  },
+  {
+    question: "¿Qué política de devoluciones tienen?",
+    answer: "Aceptamos devoluciones dentro de 30 días sin hacer preguntas. Reembolso completo garantizado."
+  },
+  {
+    question: "¿Cómo sé mi talla correcta?",
+    answer: "Contamos con una guía de tallas detallada en cada producto. Además ofrecemos cambios gratis."
+  },
+  {
+    question: "¿Aceptan pagos a plazos?",
+    answer: "Sí, ofrecemos financiamiento sin interés con tarjetas de crédito participantes."
+  }
+];
+---
+
+<section class="faq-section">
+  <div class="faq__container">
+    <h2 class="faq__title">Preguntas Frecuentes</h2>
+    <div class="faq__list">
+      {faqItems.map((item) => (
+        <details class="faq__item">
+          <summary class="faq__question">
+            <h4 class="faq__question-text">{item.question}</h4>
+            <ChevronDown size={24} class="faq__icon" />
+          </summary>
+          <div class="faq__answer">
+            <p>{item.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.faq__item').forEach(item => {
+    const summary = item.querySelector('.faq__question');
+    const answer = item.querySelector('.faq__answer') as HTMLElement;
+
+    if (summary && answer) {
+      summary.addEventListener('click', (event) => {
+        // Prevenir el comportamiento por defecto para manejar la animación
+        event.preventDefault();
+        
+        if (item.hasAttribute('open')) {
+          // Iniciar animación de cierre
+          const animation = answer.animate([{ height: `${answer.offsetHeight}px`, opacity: 1 }, { height: '0px', opacity: 0 }], {
+            duration: 300,
+            easing: 'ease-in-out'
+          });
+          
+          animation.onfinish = () => {
+            item.removeAttribute('open');
+          };
+        } else {
+          // Abrir el details para que el contenido sea visible
+          item.setAttribute('open', '');
+          
+          // Iniciar animación de apertura
+          answer.animate([{ height: '0px', opacity: 0 }, { height: `${answer.scrollHeight}px`, opacity: 1 }], {
+            duration: 300,
+            easing: 'ease-in-out'
+          });
+        }
+      });
+    }
+  });
+</script>
+
+<style lang="scss">
+  @use '@styles/_breakpoints.scss' as *;
+
+  .faq-section {
+    background-color: var(--color-white);
+    padding: 8rem 0;
+  }
+
+  .faq__container {
+    width: min(90%, 80rem);
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .faq__title {
+    color: var(--color-gray-900);
+    text-align: center;
+    margin: 0 0 4rem 0;
+    font-size: 2.8rem;
+    font-weight: var(--font-weight-bold);
+    font-family: var(--font-primary);
+    line-height: 1.2;
+  }
+
+  .faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+
+  .faq__item {
+    background-color: var(--color-white);
+    border-bottom: 1px solid var(--color-gray-200);
+    padding: 1.6rem 0;
+    
+    &[open] > .faq__question .faq__icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  .faq__question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    list-style: none; // Ocultar el marcador por defecto de summary
+    padding: 0.8rem 0;
+
+    &::-webkit-details-marker {
+      display: none; // Ocultar marcador en Chrome/Safari
+    }
+  }
+
+  .faq__question-text {
+    color: var(--color-gray-900);
+    font-size: 1.6rem;
+    font-weight: var(--font-weight-semibold);
+    margin: 0;
+    font-family: var(--font-primary);
+    line-height: 1.4;
+  }
+
+  .faq__icon {
+    color: var(--color-gray-700);
+    transition: transform 0.3s ease-in-out, color 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .faq__item:hover .faq__icon {
+    color: var(--color-gray-900);
+  }
+
+  .faq__answer {
+    color: var(--color-gray-700);
+    font-size: 1.4rem;
+    line-height: 1.6;
+    overflow: hidden;
+    margin-top: 1.2rem;
+    height: 0;
+    opacity: 0;
+    font-family: var(--font-primary);
+  }
+
+  .faq__answer p {
+    margin: 0;
+  }
+
+  .faq__item[open] .faq__answer {
+    height: auto;
+    opacity: 1;
+  }
+
+  @include tablet-medium {
+    .faq__title {
+      font-size: 3.2rem;
+    }
+
+    .faq__question-text {
+      font-size: 1.8rem;
+    }
+
+    .faq__answer {
+      font-size: 1.5rem;
+    }
+  }
+</style>
+

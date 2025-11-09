@@ -9,6 +9,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.15.4"
+    "add": "^2.0.6",
+    "astro": "^5.15.4",
+    "lucide-astro": "^0.553.0",
+    "sass": "^1.93.3"
   }
 }

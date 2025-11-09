@@ -1,0 +1,734 @@
+---
+import MainLayout from '../shared/layouts/MainLayout.astro';
+import Heading from '../shared/components/atoms/Heading/Heading.astro';
+import Text from '../shared/components/atoms/Text/Text.astro';
+import Button from '../shared/components/atoms/Button/Button.astro';
+---
+
+<MainLayout title="Carrito - CALZADO IMPERIAL">
+  <div class="page-container">
+    <Heading level={1} class="cart-title">Carrito de Compras</Heading>
+
+    <div class="cart-content" id="cart-content">
+      <div class="cart-items" id="cart-items">
+        <!-- Los items del carrito se cargarán aquí con JavaScript -->
+        <div class="cart-empty" id="cart-empty" style="display: flex;">
+          <Text size="lg" color="muted">
+            Tu carrito está vacío
+          </Text>
+          <Button href="/productos" variant="primary" size="lg" class="cart-empty-button">
+            Explorar Productos
+          </Button>
+        </div>
+      </div>
+
+      <div class="cart-summary" id="cart-summary">
+        <Heading level={3} class="cart-summary-title">Resumen</Heading>
+        <div class="cart-summary-row">
+          <Text size="md">Subtotal:</Text>
+          <Text size="md" class="cart-summary-value" id="cart-subtotal">
+            S/ 0.00
+          </Text>
+        </div>
+        <div class="cart-summary-row">
+          <Text size="md">Envío:</Text>
+          <Text size="md" class="cart-summary-value">Gratis</Text>
+        </div>
+        <div class="cart-summary-row cart-summary-total">
+          <Text size="lg" class="cart-summary-label">Total:</Text>
+          <Text size="lg" class="cart-summary-value" id="cart-total">
+            S/ 0.00
+          </Text>
+        </div>
+        <button
+          class="cart-checkout-button btn btn--primary btn--lg"
+          id="checkout-button"
+          disabled
+        >
+          Proceder al Pago
+        </button>
+      </div>
+    </div>
+  </div>
+</MainLayout>
+
+<script>
+  import {
+    getCart,
+    removeFromCart,
+    updateCartItemQuantity,
+    formatPrice,
+    saveCart,
+  } from '../shared/utils/cart.client.js';
+
+  // Función auxiliar para formatear precio (backup)
+  function formatPriceHelper(price: number): string {
+    return `S/ ${price.toLocaleString('es-PE', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+  }
+
+  // Función para limpiar y reparar el carrito si está corrupto
+  function repairCart(cart: any): any {
+    if (!cart || !Array.isArray(cart.items)) {
+      return { items: [], total: 0 };
+    }
+
+    const repairedItems = cart.items
+      .filter((item: any) => {
+        // Solo mantener items que tengan producto con id
+        return item && item.product && item.product.id;
+      })
+      .map((item: any) => {
+        // Asegurar que todos los campos necesarios estén presentes
+        return {
+          product: {
+            id: item.product.id,
+            name: item.product.name || 'Producto sin nombre',
+            brand: item.product.brand || 'Sin marca',
+            price: item.product.price || 0,
+            image: item.product.image || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=200&fit=crop',
+            description: item.product.description || '',
+            category: item.product.category || '',
+            sizes: item.product.sizes || [],
+            colors: item.product.colors || [],
+            stock: item.product.stock || 0,
+            originalPrice: item.product.originalPrice,
+            rating: item.product.rating,
+            reviews: item.product.reviews,
+            featured: item.product.featured,
+          },
+          quantity: item.quantity || 1,
+          size: item.size || '',
+          color: item.color || '',
+        };
+      });
+
+    const repairedTotal = repairedItems.reduce(
+      (sum: number, item: any) => sum + (item.product.price || 0) * (item.quantity || 1),
+      0
+    );
+
+    return {
+      items: repairedItems,
+      total: repairedTotal,
+    };
+  }
+
+  function renderCart() {
+    let cart;
+    try {
+      cart = getCart();
+      
+      // Intentar reparar el carrito si tiene problemas
+      if (cart.items && cart.items.length > 0) {
+        const invalidItems = cart.items.filter((item: any) => {
+          return !item || !item.product || !item.product.id;
+        });
+        if (invalidItems.length > 0) {
+          console.warn(`Se encontraron ${invalidItems.length} items inválidos de ${cart.items.length} total, reparando carrito...`);
+          const repairedCart = repairCart(cart);
+          console.log(`Carrito reparado: ${repairedCart.items.length} items válidos`);
+          cart = repairedCart;
+          // Guardar el carrito reparado
+          try {
+            saveCart(cart);
+          } catch (e) {
+            console.error('Error al guardar carrito reparado:', e);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error al obtener el carrito:', error);
+      cart = { items: [], total: 0 };
+    }
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartEmpty = document.getElementById('cart-empty');
+    const cartSubtotal = document.getElementById('cart-subtotal');
+    const cartTotal = document.getElementById('cart-total');
+    const checkoutButton = document.getElementById('checkout-button');
+
+    if (!cartItemsContainer || !cartEmpty || !cartSubtotal || !cartTotal || !checkoutButton) {
+      console.error('Error: No se encontraron elementos del carrito');
+      return;
+    }
+
+    console.log('=== RENDERIZANDO CARRITO ===');
+    console.log('Carrito completo:', JSON.stringify(cart, null, 2));
+    console.log('Items en carrito:', cart.items ? cart.items.length : 0);
+    
+    if (cart.items && cart.items.length > 0) {
+      console.log('Detalle de items:');
+      cart.items.forEach((item: any, index: number) => {
+        console.log(`Item ${index + 1}:`, {
+          hasProduct: !!item.product,
+          productId: item.product?.id,
+          productName: item.product?.name,
+          quantity: item.quantity,
+          size: item.size,
+          color: item.color,
+          fullItem: item
+        });
+      });
+    }
+
+    if (!cart.items || cart.items.length === 0) {
+      // Mostrar mensaje de carrito vacío
+      cartEmpty.style.display = 'flex';
+      // Limpiar items anteriores si existen
+      const existingItems = cartItemsContainer.querySelectorAll('.cart-item-wrapper');
+      existingItems.forEach(item => item.remove());
+      cartSubtotal.textContent = 'S/ 0.00';
+      cartTotal.textContent = 'S/ 0.00';
+      (checkoutButton as HTMLButtonElement).disabled = true;
+      return;
+    }
+
+    // Ocultar mensaje de carrito vacío
+    cartEmpty.style.display = 'none';
+    (checkoutButton as HTMLButtonElement).disabled = false;
+
+    // Limpiar items anteriores
+    const existingItems = cartItemsContainer.querySelectorAll('.cart-item-wrapper');
+    existingItems.forEach(item => item.remove());
+
+    let validItemsCount = 0;
+
+    // Renderizar items
+    cart.items.forEach((item: any, index: number) => {
+      console.log(`Procesando item ${index + 1}:`, item);
+      
+      // Usar los datos del producto guardados en el carrito
+      let product = item.product;
+      
+      // Si no hay producto, intentar usar el item directamente (caso de datos corruptos)
+      if (!product && item.id) {
+        console.warn(`Item ${index + 1} tiene estructura diferente, intentando reparar...`);
+        product = {
+          id: item.id,
+          name: item.name || item.productName || 'Producto',
+          brand: item.brand || '',
+          price: item.price || 0,
+          image: item.image || item.productImage || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=200&fit=crop',
+        };
+      }
+      
+      // Validación más flexible - solo requerimos que tenga id o name
+      if (!product) {
+        console.error(`Item ${index + 1}: No tiene producto ni datos alternativos`, item);
+        return;
+      }
+
+      // Si no tiene id, generar uno temporal basado en el índice
+      if (!product.id) {
+        if (product.name) {
+          product.id = `temp-${index}-${product.name.replace(/\s+/g, '-').toLowerCase()}`;
+          console.warn(`Item ${index + 1}: Producto sin ID, usando ID temporal: ${product.id}`);
+        } else {
+          console.error(`Item ${index + 1}: Producto sin ID ni nombre`, product);
+          return;
+        }
+      }
+
+      const itemId = `${product.id}-${item.size || ''}-${item.color || ''}`;
+      const priceFunc = typeof formatPrice === 'function' ? formatPrice : formatPriceHelper;
+      const itemPrice = product.price || 0;
+      const itemQuantity = item.quantity || 1;
+      const productName = product.name || 'Producto sin nombre';
+      const productBrand = product.brand || 'Sin marca';
+      const productImage = product.image || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=200&fit=crop';
+      
+      console.log(`Renderizando item ${index + 1}:`, {
+        itemId,
+        productName,
+        itemPrice,
+        itemQuantity,
+        total: itemPrice * itemQuantity
+      });
+      
+      const itemWrapper = document.createElement('div');
+      itemWrapper.className = 'cart-item-wrapper';
+      itemWrapper.setAttribute('data-item-id', itemId);
+      
+      itemWrapper.innerHTML = `
+        <div class="cart-item">
+          <div class="cart-item__image">
+            <img src="${productImage}" alt="${productName}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=200&fit=crop'" />
+          </div>
+          <div class="cart-item__details">
+            <p class="cart-item__name">${productName}</p>
+            <p class="cart-item__brand">${productBrand}</p>
+            <div class="cart-item__options">
+              <span>Talla: ${item.size || 'N/A'}</span>
+              <span>Color: ${item.color || 'N/A'}</span>
+            </div>
+            <div class="cart-item__price">
+              <span class="cart-item__unit-price">
+                ${priceFunc(itemPrice)}
+              </span>
+            </div>
+          </div>
+          <div class="cart-item__actions">
+            <div class="cart-item__quantity">
+              <button class="quantity-btn" data-action="decrease" data-item-id="${itemId}">−</button>
+              <span class="quantity-value" data-item-id="${itemId}">${itemQuantity}</span>
+              <button class="quantity-btn" data-action="increase" data-item-id="${itemId}">+</button>
+            </div>
+            <div class="cart-item__total">
+              <span class="cart-item__total-price">
+                ${priceFunc(itemPrice * itemQuantity)}
+              </span>
+            </div>
+            <button class="cart-item__remove" data-action="remove" data-item-id="${itemId}" aria-label="Eliminar producto">🗑️</button>
+          </div>
+        </div>
+      `;
+      
+      cartItemsContainer.appendChild(itemWrapper);
+      validItemsCount++;
+      console.log(`Item ${index + 1} renderizado correctamente`);
+    });
+
+    console.log(`Total de items válidos renderizados: ${validItemsCount} de ${cart.items.length}`);
+
+    // Si hay items pero no se renderizó ninguno, mostrar mensaje de error
+    if (cart.items.length > 0 && validItemsCount === 0) {
+      console.error('ERROR: Hay items en el carrito pero ninguno se pudo renderizar');
+      console.error('Items del carrito:', cart.items);
+      
+      // Mostrar mensaje al usuario
+      const errorMessage = document.createElement('div');
+      errorMessage.className = 'cart-error-message';
+      errorMessage.innerHTML = `
+        <p style="color: red; padding: 2rem; text-align: center;">
+          ⚠️ Error: Hay ${cart.items.length} producto(s) en el carrito pero no se pueden mostrar. 
+          Por favor, recarga la página o limpia el carrito.
+        </p>
+        <button onclick="localStorage.removeItem('sneakerstore_cart'); location.reload();" 
+                style="padding: 1rem 2rem; margin: 1rem auto; display: block; background: var(--color-red-500); color: white; border: none; border-radius: var(--radius); cursor: pointer;">
+          Limpiar Carrito
+        </button>
+      `;
+      cartItemsContainer.appendChild(errorMessage);
+    }
+
+    // Actualizar totales
+    const priceFunc = typeof formatPrice === 'function' ? formatPrice : formatPriceHelper;
+    cartSubtotal.textContent = priceFunc(cart.total || 0);
+    cartTotal.textContent = priceFunc(cart.total || 0);
+
+    // Agregar event listeners a los nuevos elementos
+    cartItemsContainer.querySelectorAll('[data-action]').forEach((button) => {
+      button.addEventListener('click', handleCartAction);
+    });
+  }
+
+  function handleCartAction(e: Event) {
+    const target = e.target as HTMLElement;
+    const action = target.dataset.action;
+    const itemId = target.dataset.itemId;
+
+    if (!action || !itemId) return;
+
+    const cartItemWrapper = document.querySelector(`[data-item-id="${itemId}"]`);
+    if (!cartItemWrapper) return;
+
+    if (action === 'remove') {
+      removeFromCart(itemId);
+      renderCart();
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+    } else if (action === 'increase' || action === 'decrease') {
+      const quantityElement = cartItemWrapper.querySelector(
+        '.quantity-value'
+      ) as HTMLElement;
+      if (!quantityElement) return;
+
+      const currentQuantity = parseInt(quantityElement.textContent || '1', 10);
+      const newQuantity =
+        action === 'increase' ? currentQuantity + 1 : currentQuantity - 1;
+
+      if (newQuantity < 1) {
+        removeFromCart(itemId);
+      } else {
+        updateCartItemQuantity(itemId, newQuantity);
+      }
+
+      renderCart();
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+    }
+  }
+
+  // Función para inicializar el carrito
+  function initCart() {
+    console.log('=== INICIALIZANDO CARRITO ===');
+    console.log('Estado del documento:', document.readyState);
+    
+    try {
+      // Verificar localStorage directamente
+      const stored = localStorage.getItem('sneakerstore_cart');
+      console.log('Contenido raw de localStorage:', stored);
+      
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          console.log('Carrito parseado del localStorage:', parsed);
+          console.log('Tipo de items:', Array.isArray(parsed.items) ? 'Array' : typeof parsed.items);
+          console.log('Número de items:', parsed.items ? parsed.items.length : 0);
+          
+          if (parsed.items && parsed.items.length > 0) {
+            console.log('=== DETALLE DE ITEMS EN LOCALSTORAGE ===');
+            parsed.items.forEach((item: any, index: number) => {
+              console.log(`Item ${index + 1}:`, {
+                hasProduct: !!item.product,
+                productType: typeof item.product,
+                productKeys: item.product ? Object.keys(item.product) : [],
+                quantity: item.quantity,
+                size: item.size,
+                color: item.color,
+                fullItem: item
+              });
+            });
+          } else {
+            console.warn('El carrito no tiene items o está vacío');
+          }
+        } catch (e) {
+          console.error('Error al parsear carrito del localStorage:', e);
+        }
+      } else {
+        console.warn('No hay datos en localStorage con la clave sneakerstore_cart');
+      }
+    } catch (e) {
+      console.error('Error al acceder a localStorage:', e);
+    }
+    
+    // Ejecutar renderCart inmediatamente y también después de un delay
+    console.log('Ejecutando renderCart inmediatamente...');
+    renderCart();
+    
+    // También ejecutar después de un delay por si acaso
+    setTimeout(() => {
+      console.log('Ejecutando renderCart después de delay...');
+      renderCart();
+    }, 300);
+    
+    // Y una vez más después de más tiempo
+    setTimeout(() => {
+      console.log('Verificación final del carrito...');
+      renderCart();
+    }, 1000);
+  }
+
+  // Inicializar cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('DOMContentLoaded - Inicializando carrito');
+      initCart();
+    });
+  } else {
+    // DOM ya está listo
+    console.log('DOM ya está listo - Inicializando carrito inmediatamente');
+    initCart();
+  }
+
+  // Escuchar actualizaciones del carrito desde otras páginas
+  window.addEventListener('cartUpdated', () => {
+    console.log('Carrito actualizado (evento), re-renderizando...');
+    setTimeout(() => renderCart(), 100);
+  });
+
+  // También escuchar el evento storage para cambios desde otras pestañas
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'sneakerstore_cart') {
+      console.log('Carrito actualizado desde otra pestaña');
+      setTimeout(() => renderCart(), 100);
+    }
+  });
+
+  // Renderizar también cuando se carga completamente la página
+  window.addEventListener('load', () => {
+    console.log('Página completamente cargada, verificando carrito...');
+    setTimeout(() => renderCart(), 200);
+  });
+
+  // Polling adicional para verificar cambios en localStorage
+  let lastCartData: string | null = null;
+  setInterval(() => {
+    try {
+      const currentCartData = localStorage.getItem('sneakerstore_cart');
+      if (currentCartData !== lastCartData) {
+        console.log('Cambio detectado en localStorage, re-renderizando...');
+        lastCartData = currentCartData;
+        renderCart();
+      }
+    } catch (e) {
+      // Ignorar errores en el polling
+    }
+  }, 500);
+</script>
+
+<style>
+  .page-container {
+    width: min(90%, 120rem);
+    margin: 0 auto;
+  }
+
+  .cart-title {
+    margin-bottom: 4rem;
+    text-align: center;
+  }
+
+  .cart-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+  }
+
+  .cart-items {
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: 2.4rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    min-height: 20rem;
+  }
+
+  .cart-empty {
+    text-align: center;
+    padding: 8rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .cart-empty-button {
+    margin-top: 1.6rem;
+  }
+
+  .cart-item-wrapper {
+    margin-bottom: 2rem;
+  }
+
+  .cart-item-wrapper:last-child {
+    margin-bottom: 0;
+  }
+
+  .cart-item {
+    display: grid;
+    grid-template-columns: 12rem 1fr auto;
+    gap: 2rem;
+    padding: 2rem;
+    border-bottom: 1px solid var(--color-gray-200);
+    align-items: start;
+  }
+
+  .cart-item:last-child {
+    border-bottom: none;
+  }
+
+  .cart-item__image {
+    width: 12rem;
+    height: 12rem;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background-color: var(--color-gray-50);
+  }
+
+  .cart-item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cart-item__details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .cart-item__name {
+    font-family: var(--font-primary);
+    font-size: 1.6rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+    margin: 0;
+  }
+
+  .cart-item__brand {
+    font-family: var(--font-primary);
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-gray-600);
+    margin: 0;
+  }
+
+  .cart-item__options {
+    display: flex;
+    gap: 1.6rem;
+    margin-top: 0.4rem;
+    font-family: var(--font-primary);
+    font-size: 1.4rem;
+    color: var(--color-gray-600);
+  }
+
+  .cart-item__price {
+    margin-top: 0.8rem;
+  }
+
+  .cart-item__unit-price {
+    font-family: var(--font-primary);
+    font-size: 1.4rem;
+    color: var(--color-gray-600);
+  }
+
+  .cart-item__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1.6rem;
+  }
+
+  .cart-item__quantity {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 2px solid var(--color-gray-300);
+    border-radius: var(--radius);
+    padding: 0.4rem;
+  }
+
+  .quantity-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-700);
+    cursor: pointer;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+    font-family: var(--font-primary);
+  }
+
+  .quantity-btn:hover {
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-900);
+  }
+
+  .quantity-value {
+    min-width: 3rem;
+    text-align: center;
+    font-weight: var(--font-weight-semibold);
+    font-size: 1.6rem;
+    font-family: var(--font-primary);
+  }
+
+  .cart-item__total {
+    text-align: right;
+  }
+
+  .cart-item__total-price {
+    font-family: var(--font-primary);
+    font-size: 1.8rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-900);
+  }
+
+  .cart-item__remove {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0.8rem;
+    border-radius: var(--radius);
+    transition: all 0.2s ease;
+    opacity: 0.6;
+  }
+
+  .cart-item__remove:hover {
+    opacity: 1;
+    background-color: var(--color-red-50);
+    transform: scale(1.1);
+  }
+
+  .cart-summary {
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: 2.4rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+    position: sticky;
+    top: 10rem;
+  }
+
+  .cart-summary-title {
+    margin-bottom: 2rem;
+    padding-bottom: 1.6rem;
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+
+  .cart-summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.6rem;
+  }
+
+  .cart-summary-total {
+    padding-top: 1.6rem;
+    border-top: 2px solid var(--color-gray-300);
+    margin-top: 1.6rem;
+  }
+
+  .cart-summary-label {
+    font-weight: var(--font-weight-bold);
+  }
+
+  .cart-summary-value {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .cart-checkout-button {
+    width: 100%;
+    margin-top: 2rem;
+  }
+
+  .cart-checkout-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    .cart-content {
+      grid-template-columns: 1fr;
+    }
+
+    .cart-summary {
+      position: static;
+    }
+
+    .cart-item {
+      grid-template-columns: 10rem 1fr;
+      gap: 1.6rem;
+    }
+
+    .cart-item__actions {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--color-gray-200);
+    }
+
+    .cart-item__image {
+      width: 10rem;
+      height: 10rem;
+    }
+  }
+</style>

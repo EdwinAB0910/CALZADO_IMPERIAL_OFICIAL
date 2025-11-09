@@ -1,43 +1,157 @@
-# Astro Starter Kit: Minimal
+# SneakerStore - Tienda de Zapatillas
 
-```sh
-npm create astro@latest -- --template minimal
+Tienda de zapatillas construida con **Astro**, siguiendo **Screaming Architecture** y **Atomic Design**.
+
+## 🏗️ Arquitectura
+
+Este proyecto sigue dos principios arquitectónicos principales:
+
+### Screaming Architecture
+La estructura de carpetas está organizada por **features** (características/funcionalidades) en lugar de por tipo de archivo:
+
+```
+src/
+  features/
+    products/          # Feature: Productos
+      components/      # Componentes específicos de productos
+      services/        # Lógica de negocio de productos
+      types/           # Tipos específicos de productos
+    cart/              # Feature: Carrito
+      components/
+      services/
+      types/
+  shared/              # Recursos compartidos
+    components/        # Componentes reutilizables
+    layouts/           # Layouts
+    types/             # Tipos compartidos
+    utils/             # Utilidades
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### Atomic Design
+Los componentes están organizados en tres niveles:
 
-## 🚀 Project Structure
+- **Atoms** (Átomos): Componentes básicos e indivisibles
+  - Button, Input, Image, Text, Heading, Card
 
-Inside of your Astro project, you'll see the following folders and files:
+- **Molecules** (Moléculas): Combinaciones de átomos
+  - ProductCard, SearchBar
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+- **Organisms** (Organismos): Combinaciones complejas de moléculas y átomos
+  - Header, Footer, ProductGrid
+
+## 📁 Estructura de Carpetas
+
+```
+src/
+├── features/
+│   ├── products/
+│   │   ├── components/
+│   │   │   ├── molecules/
+│   │   │   │   ├── ProductCard/
+│   │   │   │   └── SearchBar/
+│   │   │   └── organisms/
+│   │   │       └── ProductGrid/
+│   │   └── services/
+│   │       └── product.service.ts
+│   └── cart/
+│       └── services/
+│           └── cart.service.ts
+├── shared/
+│   ├── components/
+│   │   ├── atoms/
+│   │   │   ├── Button/
+│   │   │   ├── Card/
+│   │   │   ├── Heading/
+│   │   │   ├── Image/
+│   │   │   ├── Input/
+│   │   │   └── Text/
+│   │   └── organisms/
+│   │       ├── Header/
+│   │       └── Footer/
+│   ├── layouts/
+│   │   └── MainLayout.astro
+│   └── types/
+│       ├── product.types.ts
+│       └── index.ts
+├── pages/
+│   ├── index.astro
+│   ├── productos/
+│   │   ├── index.astro
+│   │   └── [id].astro
+│   └── carrito.astro
+└── styles/
+    ├── app.scss
+    ├── _breakpoints.scss
+    ├── _global.scss
+    └── _mixins.scss
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 🚀 Comenzar
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+### Instalación
 
-Any static assets, like images, can be placed in the `public/` directory.
+```bash
+npm install
+```
 
-## 🧞 Commands
+### Desarrollo
 
-All commands are run from the root of the project, from a terminal:
+```bash
+npm run dev
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+La aplicación estará disponible en `http://localhost:4321`
 
-## 👀 Want to learn more?
+### Build
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```bash
+npm run build
+```
+
+### Preview
+
+```bash
+npm run preview
+```
+
+## 🎨 Sistema de Diseño
+
+El proyecto utiliza un sistema de diseño basado en:
+
+- **Variables CSS**: Colores, tipografías, espaciados definidos en `_global.scss`
+- **Breakpoints**: Mixins responsive definidos en `_breakpoints.scss`
+- **Mixins**: Utilidades reutilizables en `_mixins.scss`
+
+## 📦 Características
+
+- ✅ Arquitectura modular (Screaming Architecture)
+- ✅ Diseño atómico (Atomic Design)
+- ✅ TypeScript para type safety
+- ✅ SCSS para estilos
+- ✅ Responsive design
+- ✅ Componentes reutilizables
+- ✅ Servicios para lógica de negocio
+- ✅ Páginas: Home, Productos, Detalle de Producto, Carrito
+
+## 🛠️ Tecnologías
+
+- **Astro**: Framework web
+- **TypeScript**: Type safety
+- **SCSS**: Estilos
+- **HTML/CSS**: Markup y estilos
+
+## 📝 Notas
+
+- Los productos están definidos en `src/features/products/services/product.service.ts`
+- El carrito es funcional pero necesita integración con estado global para persistencia
+- Las imágenes utilizan URLs de Unsplash como placeholders
+
+## 🔄 Próximos Pasos
+
+- [ ] Integrar estado global para el carrito
+- [ ] Agregar persistencia del carrito (localStorage)
+- [ ] Implementar filtros y ordenamiento de productos
+- [ ] Agregar más páginas (sobre nosotros, contacto, etc.)
+- [ ] Integrar con API backend
+- [ ] Agregar tests
+- [ ] Optimizar imágenes

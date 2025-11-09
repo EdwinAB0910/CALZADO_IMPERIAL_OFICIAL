@@ -1,0 +1,248 @@
+---
+import { Instagram, Facebook, Twitter } from 'lucide-astro';
+---
+
+<footer class="organism-footer">
+  <div class="footer__container">
+    <div class="footer__content">
+      <div class="footer__section">
+        <h4 class="footer__brand">CALZADO IMPERIAL</h4>
+        <p class="footer__description">
+          Premium Footwear para atletas y profesionales.
+        </p>
+      </div>
+      <div class="footer__section">
+        <h5 class="footer__heading">Compañía</h5>
+        <ul class="footer__links">
+          <li><a href="/">Inicio</a></li>
+          <li><a href="/productos">Productos</a></li>
+          <li><a href="/nosotros">Nosotros</a></li>
+        </ul>
+      </div>
+      <div class="footer__section">
+        <h5 class="footer__heading">Legal</h5>
+        <ul class="footer__links">
+          <li><a href="/privacidad">Privacidad</a></li>
+          <li><a href="/terminos">Términos</a></li>
+          <li><a href="/contacto">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer__section">
+        <h5 class="footer__heading">Síguenos</h5>
+        <ul class="footer__links footer__links--social">
+          <li>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="footer__social-link">
+              <Instagram size={20} />
+              <span>Instagram</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="footer__social-link">
+              <Facebook size={20} />
+              <span>Facebook</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="footer__social-link">
+              <Twitter size={20} />
+              <span>Twitter</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__divider"></div>
+    <div class="footer__bottom">
+      <p class="footer__copyright">
+        © 2025 CALZADO IMPERIAL. Todos los derechos reservados.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style lang="scss">
+  @use '@styles/_breakpoints.scss' as *;
+
+  .organism-footer {
+    background-color: var(--color-black);
+    color: var(--color-white);
+    padding: 10rem 0 4rem;
+    margin-top: 0;
+  }
+
+  .footer__container {
+    width: min(90%, 120rem);
+    margin: 0 auto;
+    padding: 0 4rem;
+
+  }
+
+  .footer__content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 6rem;
+    margin-bottom: 5rem;
+  }
+
+  .footer__section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer__brand {
+    color: var(--color-gray-200);
+    margin: 0 0 1.6rem 0;
+    font-size: 1.8rem;
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: var(--font-primary);
+    line-height: 1.2;
+  }
+
+  .footer__description {
+    color: var(--color-gray-300);
+    font-size: 1.4rem;
+    line-height: 1.6;
+    margin: 0;
+    max-width: 30rem;
+    font-family: var(--font-primary);
+  }
+
+  .footer__heading {
+    color: var(--color-gray-200);
+    margin: 0 0 1.6rem 0;
+    font-size: 1.6rem;
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.02em;
+    font-family: var(--font-primary);
+    line-height: 1.2;
+  }
+
+  .footer__links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+  }
+
+  .footer__links a {
+    color: var(--color-gray-300);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 1.6rem;
+    font-family: var(--font-primary);
+    line-height: 1.6;
+    padding: 0.4rem 0;
+  }
+
+  .footer__links a:hover {
+    color: var(--color-gray-200);
+  }
+
+  .footer__links--social {
+    gap: 2rem;
+  }
+
+  .footer__social-link {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 0.4rem 0;
+    color: var(--color-gray-300);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .footer__social-link span {
+    font-size: 1.6rem;
+    color: var(--color-gray-300);
+    transition: color 0.3s ease;
+  }
+
+  .footer__social-link svg {
+    color: var(--color-gray-300);
+    transition: color 0.3s ease;
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+
+  .footer__social-link:hover {
+    color: var(--color-gray-200);
+  }
+
+  .footer__social-link:hover svg,
+  .footer__social-link:hover span {
+    color: var(--color-gray-200);
+  }
+
+  .footer__divider {
+    height: 1px;
+    background-color: var(--color-gray-600);
+    margin: 5rem 0 4rem;
+  }
+
+  .footer__bottom {
+    text-align: center;
+    padding-top: 2rem;
+  }
+
+  .footer__copyright {
+    color: var(--color-gray-200);
+    font-size: 1.6rem;
+    margin: 0;
+    letter-spacing: 0.02em;
+  }
+
+  @include tablet-small {
+    .footer__container {
+      padding: 0 4rem;
+    }
+
+    .footer__content {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 5rem;
+    }
+  }
+
+  @include tablet-medium {
+    .organism-footer {
+      padding: 12rem 0 5rem;
+    }
+
+    .footer__container {
+      padding: 0 6rem;
+    }
+
+    .footer__content {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4rem;
+      margin-bottom: 6rem;
+    }
+
+    .footer__brand {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer__heading {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer__links {
+      gap: 2rem;
+    }
+
+    .footer__links a {
+      font-size: 1.6rem;
+    }
+
+    .footer__divider {
+      margin: 6rem 0 4rem;
+    }
+  }
+</style>
+
