@@ -1,0 +1,93 @@
+@use "sass:meta";
+
+// 📌 Mixin para aplicar estilos si el elemento tiene un hijo específico
+@mixin has($child) {
+    &:has(#{$child}) {
+      @content;
+    }
+  }
+
+// 📌 Mixin para aplicar sombras con niveles (1-5) y color personalizable
+
+
+// 📌 Mixin para sombras con niveles (1-5) y conversión automática de color
+@mixin shadow($level: 1, $color: #000) {
+  // 🔹 Definir opacidad según el nivel
+  $opacity: if($level == 1, 0.1,
+          if($level == 2, 0.15,
+          if($level == 3, 0.2,
+          if($level == 4, 0.25,
+          if($level == 5, 0.3, null)))));
+
+  // 🔹 Si el color no tiene transparencia (es hex o rgb), lo convertimos a `rgba()`
+  $shadow-color: if(meta.type-of($color) == "color" and not str-index(#{$color}, "rgba"), rgba($color, $opacity), $color);
+
+  @if $level == 1 {
+    box-shadow: 0 2px 4px $shadow-color;
+  } @else if $level == 2 {
+    box-shadow: 0 4px 6px $shadow-color;
+  } @else if $level == 3 {
+    box-shadow: 0 6px 12px $shadow-color;
+  } @else if $level == 4 {
+    box-shadow: 0 10px 20px $shadow-color;
+  } @else if $level == 5 {
+    box-shadow: 0 15px 25px $shadow-color;
+  } @else {
+    @warn "⚠️ Nivel de sombra `#{$level}` no válido. Usa un valor entre 1 y 5.";
+  }
+}
+
+// 📌 Mixin para centrar con Flexbox sin parámetros
+@mixin center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  // 📌 Mixin para centrar con `position: absolute | fixed` automáticamente
+@mixin center-abs {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+
+  // 📌 Mixin para crear un Skeleton Loader animado
+@mixin skeleton($bg: #e0e0e0, $highlight: #f5f5f5, $radius: 4px, $duration: 1.5s) {
+    background: linear-gradient(90deg, $bg 25%, $highlight 50%, $bg 75%);
+    background-size: 200% 100%;
+    border-radius: $radius;
+    animation: skeleton-animation $duration infinite linear;
+  
+    @keyframes skeleton-animation {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  }
+  
+  // 📌 Mixin para crear una línea animada debajo de un elemento en hover con `border-radius`
+@mixin underline-hover($color: currentColor, $height: 2px, $radius: 0px, $duration: 0.3s, $bottom: 10%) {
+  position: relative;
+
+  &::after {
+    content: "";
+    width: 100%;
+    height: $height;
+    background: $color;
+    position: absolute;
+    bottom: $bottom;
+    left: 0;
+    border-radius: $radius; // Permite redondear la línea
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform $duration ease;
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
+
+  &:hover {
+    color: $color;
+  }
+}

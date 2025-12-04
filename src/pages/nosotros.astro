@@ -1,0 +1,1122 @@
+---
+export const prerender = true;
+
+import MainLayout from '../shared/layouts/MainLayout.astro';
+import Button from '../shared/components/atoms/Button/Button.astro';
+import Card from '../shared/components/atoms/Card/Card.astro';
+---
+
+<MainLayout title="Sobre Nosotros - CALZADO IMPERIAL">
+  <div class="nosotros">
+    <!-- Hero Section -->
+    <section class="nosotros__hero">
+      <div class="nosotros__hero-content">
+        <h1 class="nosotros__hero-title">
+          Sobre Nosotros
+        </h1>
+        <p class="nosotros__hero-subtitle">
+          Tu tienda de confianza para las mejores zapatillas del mercado
+        </p>
+      </div>
+    </section>
+
+    <!-- Historia Section -->
+    <section class="nosotros__history">
+      <div class="nosotros__history-content">
+        <div class="nosotros__history-text">
+          <h2 class="nosotros__title">
+            Nuestra Historia
+          </h2>
+          <p class="nosotros__description">
+            CALZADO IMPERIAL nació de la pasión por las zapatillas y el deseo de ofrecer 
+            a nuestros clientes las mejores marcas y modelos del mercado. Desde nuestros 
+            inicios en 2020, hemos crecido hasta convertirnos en una de las tiendas más 
+            reconocidas en el sector.
+          </p>
+          <p class="nosotros__description">
+            Nos especializamos en zapatillas de running, casuales, deportivas y de moda, 
+            trabajando con las marcas más prestigiosas como Nike, Adidas, Converse, Vans 
+            y muchas más. Nuestro compromiso es ofrecer calidad, variedad y el mejor 
+            servicio al cliente.
+          </p>
+        </div>
+        <div class="nosotros__history-image">
+          <img 
+            src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&h=800&fit=crop&auto=format" 
+            alt="Zapatillas deportivas de running - CALZADO IMPERIAL" 
+            class="nosotros__history-img"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Valores Section -->
+    <section class="nosotros__values">
+      <h2 class="nosotros__title nosotros__title--center">
+        Nuestros Valores
+      </h2>
+      <div class="nosotros__values-grid">
+        <Card class="nosotros__value-card nosotros__value-card--quality">
+          <div class="nosotros__value-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3 class="nosotros__value-title">Calidad</h3>
+          <p class="nosotros__value-description">
+            Solo trabajamos con productos de las mejores marcas y garantizamos 
+            la autenticidad de cada par de zapatillas.
+          </p>
+        </Card>
+
+        <Card class="nosotros__value-card nosotros__value-card--service">
+          <div class="nosotros__value-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 11C11.2091 11 13 9.20914 13 7C13 4.79086 11.2091 3 9 3C6.79086 3 5 4.79086 5 7C5 9.20914 6.79086 11 9 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89318 18.7122 8.75608 18.1676 9.45769C17.623 10.1593 16.8604 10.6597 16 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="nosotros__value-title">Servicio al Cliente</h3>
+          <p class="nosotros__value-description">
+            Nuestro equipo está siempre disponible para ayudarte a encontrar 
+            el par perfecto que se adapte a tus necesidades.
+          </p>
+        </Card>
+
+        <Card class="nosotros__value-card nosotros__value-card--innovation">
+          <div class="nosotros__value-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3 class="nosotros__value-title">Innovación</h3>
+          <p class="nosotros__value-description">
+            Mantenemos nuestro catálogo actualizado con los últimos modelos y 
+            tendencias del mercado de zapatillas.
+          </p>
+        </Card>
+
+        <Card class="nosotros__value-card nosotros__value-card--commitment">
+          <div class="nosotros__value-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.57831 8.50903 2.99871 7.05 2.99871C5.59096 2.99871 4.19169 3.57831 3.16 4.61C2.1283 5.64169 1.54871 7.04097 1.54871 8.5C1.54871 9.95903 2.1283 11.3583 3.16 12.39L4.22 13.45L12 21.23L19.78 13.45L20.84 12.39C21.351 11.8792 21.7564 11.2728 22.0329 10.6054C22.3095 9.93789 22.4518 9.22248 22.4518 8.5C22.4518 7.77752 22.3095 7.0621 22.0329 6.39464C21.7564 5.72718 21.351 5.12075 20.84 4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3 class="nosotros__value-title">Compromiso</h3>
+          <p class="nosotros__value-description">
+            Estamos comprometidos con la satisfacción de nuestros clientes y 
+            con ofrecer siempre los mejores precios del mercado.
+          </p>
+        </Card>
+      </div>
+    </section>
+
+    <!-- Misión y Visión -->
+    <section class="nosotros__mission-vision">
+      <div class="nosotros__mission-vision-grid">
+        <Card class="nosotros__mission-card">
+          <h2 class="nosotros__mission-title">Nuestra Misión</h2>
+          <p class="nosotros__mission-text">
+            Proporcionar a nuestros clientes acceso a las mejores zapatillas del mercado, 
+            ofreciendo calidad, variedad y un servicio excepcional. Queremos que cada 
+            cliente encuentre el par perfecto que combine estilo, comodidad y funcionalidad.
+          </p>
+        </Card>
+
+        <Card class="nosotros__vision-card">
+          <h2 class="nosotros__vision-title">Nuestra Visión</h2>
+          <p class="nosotros__vision-text">
+            Ser la tienda de zapatillas de referencia a nivel nacional, reconocida por 
+            nuestra excelencia en servicio al cliente, nuestra amplia selección de productos 
+            y nuestro compromiso constante con la calidad y la innovación.
+          </p>
+        </Card>
+      </div>
+    </section>
+
+    <!-- Equipo Section -->
+    <section class="nosotros__team">
+      <h2 class="nosotros__title nosotros__title--center">
+        Nuestro Equipo
+      </h2>
+      <p class="nosotros__team-description">
+        Conoce al equipo apasionado que hace posible CALZADO IMPERIAL
+      </p>
+      <div class="nosotros__team-grid">
+        <Card class="nosotros__team-member">
+          <img 
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&auto=format" 
+            alt="Carlos García - CEO & Fundador" 
+            class="nosotros__member-avatar"
+            loading="lazy"
+          />
+          <h4 class="nosotros__member-name">Carlos García</h4>
+          <p class="nosotros__member-role">CEO & Fundador</p>
+          <p class="nosotros__member-bio">
+            Apasionado por las zapatillas desde joven, Carlos fundó CALZADO IMPERIAL 
+            con la visión de crear la mejor tienda online del sector.
+          </p>
+        </Card>
+
+        <Card class="nosotros__team-member">
+          <img 
+            src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&auto=format" 
+            alt="Ana Martínez - Directora de Compras" 
+            class="nosotros__member-avatar"
+            loading="lazy"
+          />
+          <h4 class="nosotros__member-name">Ana Martínez</h4>
+          <p class="nosotros__member-role">Directora de Compras</p>
+          <p class="nosotros__member-bio">
+            Experta en moda y tendencias, Ana se encarga de seleccionar los mejores 
+            productos para nuestro catálogo.
+          </p>
+        </Card>
+
+        <Card class="nosotros__team-member">
+          <img 
+            src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&auto=format" 
+            alt="Miguel López - Director de Tecnología" 
+            class="nosotros__member-avatar"
+            loading="lazy"
+          />
+          <h4 class="nosotros__member-name">Miguel López</h4>
+          <p class="nosotros__member-role">Director de Tecnología</p>
+          <p class="nosotros__member-bio">
+            Miguel asegura que nuestra plataforma online ofrezca la mejor experiencia 
+            de compra posible.
+          </p>
+        </Card>
+
+        <Card class="nosotros__team-member">
+          <img 
+            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&auto=format" 
+            alt="Laura Fernández - Diseñadora UX/UI" 
+            class="nosotros__member-avatar"
+            loading="lazy"
+          />
+          <h4 class="nosotros__member-name">Laura Fernández</h4>
+          <p class="nosotros__member-role">Diseñadora UX/UI</p>
+          <p class="nosotros__member-bio">
+            Laura se encarga de que nuestra tienda sea intuitiva, moderna y fácil de usar.
+          </p>
+        </Card>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="nosotros__cta">
+      <Card class="nosotros__cta-card">
+        <h2 class="nosotros__cta-title">
+          ¿Listo para encontrar tus zapatillas perfectas?
+        </h2>
+        <p class="nosotros__cta-text">
+          Explora nuestra amplia selección de zapatillas de las mejores marcas
+        </p>
+        <div class="nosotros__cta-buttons">
+          <Button href="/productos" variant="primary" size="lg" class="nosotros__cta-btn-primary">
+            Ver Productos
+          </Button>
+          <Button href="/contacto" variant="secondary" size="lg" class="nosotros__cta-btn-secondary">
+            Contáctanos
+          </Button>
+        </div>
+      </Card>
+    </section>
+  </div>
+</MainLayout>
+
+<style lang="scss">
+  @use '../styles/breakpoints' as *;
+  @use '../styles/mixins' as *;
+
+  // ============================================================================
+  // Block: nosotros
+  // ============================================================================
+  .nosotros {
+    width: min(90%, 120rem);
+    margin: 0 auto;
+    padding: 0 1.6rem;
+
+    @include tablet-medium {
+      padding: 0 2rem;
+    }
+  }
+
+  // ============================================================================
+  // Element: hero
+  // ============================================================================
+  .nosotros__hero {
+    text-align: center;
+    padding: 4rem 1.6rem;
+    margin-bottom: 4rem;
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    position: relative;
+    overflow: hidden;
+
+    @include tablet-medium {
+      padding: 6rem 2rem;
+      margin-bottom: 6rem;
+      border-radius: var(--radius-2xl);
+    }
+
+    @include laptop-small {
+      padding: 8rem 2rem;
+      margin-bottom: 8rem;
+    }
+  }
+
+  .nosotros__hero-content {
+    max-width: 80rem;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .nosotros__hero-title {
+    margin-bottom: 1.6rem;
+    color: var(--color-gray-900);
+    font-size: 3.2rem;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1;
+
+    @include tablet-medium {
+      font-size: 4rem;
+      margin-bottom: 2rem;
+    }
+
+    @include laptop-small {
+      font-size: 5.6rem;
+      margin-bottom: 2.4rem;
+    }
+  }
+
+  .nosotros__hero-subtitle {
+    color: var(--color-gray-600);
+    max-width: 60rem;
+    margin: 0 auto;
+    font-size: 1.6rem;
+    line-height: 1.6;
+
+    @include tablet-medium {
+      font-size: 1.8rem;
+    }
+
+    @include laptop-small {
+      font-size: 2rem;
+    }
+  }
+
+  // ============================================================================
+  // Element: history
+  // ============================================================================
+  .nosotros__history {
+    margin-bottom: 4rem;
+
+    @include tablet-medium {
+      margin-bottom: 6rem;
+    }
+
+    @include laptop-small {
+      margin-bottom: 8rem;
+    }
+  }
+
+  .nosotros__history-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+
+    @include tablet-landscape {
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+
+    @include laptop-small {
+      gap: 6rem;
+    }
+  }
+
+  .nosotros__history-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+
+    @include tablet-medium {
+      gap: 2rem;
+    }
+
+    @include laptop-small {
+      gap: 2.4rem;
+    }
+  }
+
+  .nosotros__history-image {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: var(--radius-xl);
+    order: -1;
+
+    @include tablet-medium {
+      border-radius: var(--radius-2xl);
+    }
+
+    @include tablet-landscape {
+      order: 0;
+    }
+  }
+
+  .nosotros__history-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius-xl);
+    border: 2px solid var(--color-gray-200);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: var(--color-gray-100);
+    display: block;
+
+    @include tablet-medium {
+      border-radius: var(--radius-2xl);
+    }
+
+    @include laptop-small {
+      &:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        border-color: var(--color-gray-300);
+      }
+    }
+  }
+
+  // ============================================================================
+  // Element: title (shared)
+  // ============================================================================
+  .nosotros__title {
+    margin-bottom: 2rem;
+    color: var(--color-gray-900);
+    font-size: 2.4rem;
+    font-weight: var(--font-weight-bold);
+
+    @include tablet-medium {
+      font-size: 3.2rem;
+      margin-bottom: 2.4rem;
+    }
+
+    @include laptop-small {
+      font-size: 4rem;
+      margin-bottom: 3rem;
+    }
+
+    &--center {
+      text-align: center;
+      margin-bottom: 1.2rem;
+      position: relative;
+      padding-bottom: 1.6rem;
+
+      @include tablet-medium {
+        margin-bottom: 1.6rem;
+        padding-bottom: 2rem;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4rem;
+        height: 3px;
+        background: var(--color-black);
+        border-radius: var(--radius-full);
+
+        @include tablet-medium {
+          width: 6rem;
+          height: 4px;
+        }
+      }
+    }
+  }
+
+  .nosotros__description {
+    line-height: 1.8;
+    color: var(--color-gray-700);
+    font-size: 1.5rem;
+
+    @include tablet-medium {
+      font-size: 1.6rem;
+      line-height: 1.9;
+    }
+
+    @include laptop-small {
+      font-size: 1.7rem;
+    }
+  }
+
+  // ============================================================================
+  // Element: values
+  // ============================================================================
+  .nosotros__values {
+    margin-bottom: 4rem;
+
+    @include tablet-medium {
+      margin-bottom: 6rem;
+    }
+
+    @include laptop-small {
+      margin-bottom: 8rem;
+    }
+  }
+
+  .nosotros__values-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 3rem;
+
+    @include tablet-small {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.4rem;
+    }
+
+    @include tablet-landscape {
+      grid-template-columns: repeat(4, 1fr);
+      margin-top: 4rem;
+    }
+
+    @include laptop-small {
+      gap: 3rem;
+      margin-top: 6rem;
+    }
+  }
+
+  :global(.nosotros__value-card) {
+    padding: 2.4rem 2rem !important;
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 1.6rem;
+    height: 100%;
+    background: var(--color-white) !important;
+    border: 2px solid var(--color-gray-100) !important;
+    border-radius: var(--radius-lg);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+
+    @include tablet-medium {
+      padding: 3rem 2rem !important;
+      border-radius: var(--radius-xl);
+      gap: 2rem;
+    }
+
+    @include laptop-small {
+      padding: 4rem 3rem !important;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--color-black);
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+      z-index: 1;
+
+      @include tablet-medium {
+        height: 4px;
+      }
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        transform: translateY(-4px) !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+
+        @include laptop-small {
+          transform: translateY(-8px) !important;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+        }
+
+        &::before {
+          transform: scaleX(1);
+        }
+
+        :global(.nosotros__value-icon) {
+          transform: scale(1.1) rotate(5deg);
+        }
+      }
+    }
+  }
+
+  :global(.nosotros__value-card--quality),
+  :global(.nosotros__value-card--service),
+  :global(.nosotros__value-card--innovation),
+  :global(.nosotros__value-card--commitment) {
+    &::before {
+      background: var(--color-black) !important;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        border-color: var(--color-gray-300) !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+      }
+    }
+  }
+
+  :global(.nosotros__value-icon) {
+    width: 5.6rem;
+    height: 5.6rem;
+    margin: 0 auto 0.5rem;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray-900);
+
+    @include tablet-medium {
+      width: 6.4rem;
+      height: 6.4rem;
+    }
+
+    @include laptop-small {
+      width: 7.2rem;
+      height: 7.2rem;
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  :global(.nosotros__value-title) {
+    margin: 0 auto;
+    color: var(--color-gray-900);
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    text-align: center;
+    width: 100%;
+
+    @include tablet-medium {
+      font-size: 2.2rem;
+    }
+
+    @include laptop-small {
+      font-size: 2.4rem;
+    }
+  }
+
+  :global(.nosotros__value-description) {
+    margin: 0 auto;
+    color: var(--color-gray-600);
+    font-size: 1.5rem;
+    line-height: 1.6;
+    font-family: var(--font-primary);
+    text-align: center;
+    width: 100%;
+
+    @include tablet-medium {
+      font-size: 1.6rem;
+      line-height: 1.7;
+    }
+
+    @include laptop-small {
+      font-size: 1.7rem;
+      line-height: 1.8;
+    }
+  }
+
+  // ============================================================================
+  // Element: mission-vision
+  // ============================================================================
+  .nosotros__mission-vision {
+    margin-bottom: 4rem;
+
+    @include tablet-medium {
+      margin-bottom: 6rem;
+    }
+
+    @include laptop-small {
+      margin-bottom: 8rem;
+    }
+  }
+
+  .nosotros__mission-vision-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+    margin-top: 3rem;
+
+    @include tablet-medium {
+      gap: 3rem;
+      margin-top: 4rem;
+    }
+
+    @include tablet-landscape {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include laptop-small {
+      gap: 4rem;
+    }
+  }
+
+  :global(.nosotros__mission-card),
+  :global(.nosotros__vision-card) {
+    padding: 2.4rem 2rem !important;
+    background: var(--color-white) !important;
+    border-radius: var(--radius-lg);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+
+    @include tablet-medium {
+      padding: 3rem 2.5rem !important;
+      border-radius: var(--radius-xl);
+    }
+
+    @include laptop-small {
+      padding: 4.5rem !important;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      z-index: 1;
+
+      @include tablet-medium {
+        height: 6px;
+      }
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        transform: translateY(-2px) !important;
+        @include shadow(2, var(--color-gray-300));
+
+        @include laptop-small {
+          transform: translateY(-4px) !important;
+          @include shadow(3, var(--color-gray-300));
+        }
+      }
+    }
+  }
+
+  :global(.nosotros__mission-card),
+  :global(.nosotros__vision-card) {
+    &::before {
+      background: var(--color-black) !important;
+    }
+  }
+
+  :global(.nosotros__mission-title),
+  :global(.nosotros__vision-title) {
+    margin-bottom: 1.6rem;
+    font-size: 2.4rem;
+    font-weight: var(--font-weight-bold);
+
+    @include tablet-medium {
+      font-size: 2.8rem;
+      margin-bottom: 2rem;
+    }
+
+    @include laptop-small {
+      font-size: 3.2rem;
+      margin-bottom: 2.4rem;
+    }
+  }
+
+  :global(.nosotros__mission-title),
+  :global(.nosotros__vision-title) {
+    color: var(--color-gray-900);
+  }
+
+  :global(.nosotros__mission-text),
+  :global(.nosotros__vision-text) {
+    line-height: 1.8;
+    color: var(--color-gray-700);
+    font-size: 1.5rem;
+
+    @include tablet-medium {
+      font-size: 1.6rem;
+      line-height: 1.9;
+    }
+
+    @include laptop-small {
+      font-size: 1.7rem;
+    }
+  }
+
+  // ============================================================================
+  // Element: team
+  // ============================================================================
+  .nosotros__team {
+    margin-bottom: 4rem;
+
+    @include tablet-medium {
+      margin-bottom: 6rem;
+    }
+
+    @include laptop-small {
+      margin-bottom: 8rem;
+    }
+  }
+
+  .nosotros__team-description {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 1.5rem;
+    color: var(--color-gray-600);
+    max-width: 60rem;
+    margin-left: auto;
+    margin-right: auto;
+
+    @include tablet-medium {
+      font-size: 1.6rem;
+      margin-bottom: 4rem;
+    }
+
+    @include laptop-small {
+      font-size: 1.8rem;
+      margin-bottom: 5rem;
+    }
+  }
+
+  .nosotros__team-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+    align-items: start;
+    width: 100%;
+
+    @include tablet-small {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.4rem;
+      align-items: stretch;
+    }
+
+    @include tablet-landscape {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2.4rem;
+    }
+
+    @include laptop-small {
+      gap: 3.2rem;
+    }
+  }
+
+  :global(.nosotros__team-member) {
+    width: 100%;
+    padding: 3.2rem 2.4rem !important;
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 1.6rem;
+    background: var(--color-white) !important;
+    border: 1px solid var(--color-gray-200) !important;
+    border-radius: var(--radius-xl);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+
+    @include tablet-medium {
+      padding: 3.6rem 2.8rem !important;
+      gap: 1.8rem;
+      border-radius: var(--radius-2xl);
+      border-width: 1.5px;
+    }
+
+    @include laptop-small {
+      padding: 4rem 3.2rem !important;
+      gap: 2rem;
+    }
+
+    // Efecto de borde superior sutil
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--color-black);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        transform: translateY(-6px) !important;
+        border-color: var(--color-gray-300) !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+
+        @include laptop-small {
+          transform: translateY(-8px) !important;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+        }
+
+        &::before {
+          opacity: 1;
+        }
+
+        :global(.nosotros__member-avatar) {
+          transform: scale(1.05) translateY(-2px);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        :global(.nosotros__member-name) {
+          color: var(--color-gray-900);
+        }
+      }
+    }
+  }
+
+  :global(.nosotros__member-avatar) {
+    width: 10rem;
+    height: 10rem;
+    min-width: 10rem;
+    min-height: 10rem;
+    border-radius: 50%;
+    margin: 0 auto;
+    padding: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 4px solid var(--color-white);
+    flex-shrink: 0;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+    object-fit: cover;
+    display: block;
+    background: var(--color-gray-100);
+
+    @include tablet-medium {
+      width: 11rem;
+      height: 11rem;
+      min-width: 11rem;
+      min-height: 11rem;
+      border-width: 5px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    @include laptop-small {
+      width: 12rem;
+      height: 12rem;
+      min-width: 12rem;
+      min-height: 12rem;
+      border-width: 6px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  :global(.nosotros__member-name) {
+    margin: 0 auto;
+    padding: 0;
+    color: var(--color-gray-900);
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.3;
+    transition: color 0.3s ease;
+    width: 100%;
+    text-align: center;
+
+    @include tablet-medium {
+      font-size: 2.2rem;
+    }
+
+    @include laptop-small {
+      font-size: 2.4rem;
+    }
+  }
+
+  :global(.nosotros__member-role) {
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 1.2rem;
+    color: var(--color-gray-600);
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+    line-height: 1.4;
+    text-align: center;
+
+    @include tablet-medium {
+      font-size: 1.3rem;
+      letter-spacing: 0.15em;
+    }
+
+    @include laptop-small {
+      font-size: 1.4rem;
+    }
+  }
+
+  :global(.nosotros__member-bio) {
+    line-height: 1.7;
+    color: var(--color-gray-600);
+    margin: 0 auto;
+    padding: 0;
+    font-size: 1.5rem;
+    width: 100%;
+    text-align: center;
+
+    @include tablet-medium {
+      font-size: 1.55rem;
+      line-height: 1.75;
+    }
+
+    @include laptop-small {
+      font-size: 1.6rem;
+      line-height: 1.8;
+    }
+  }
+
+  // ============================================================================
+  // Element: cta
+  // ============================================================================
+  .nosotros__cta {
+    margin-bottom: 4rem;
+
+    @include tablet-medium {
+      margin-bottom: 6rem;
+    }
+  }
+
+  :global(.nosotros__cta-card) {
+    padding: 3rem 2rem !important;
+    text-align: center;
+    background: var(--color-black) !important;
+    color: var(--color-white);
+    border-radius: var(--radius-xl);
+    position: relative;
+    overflow: hidden;
+    border: none !important;
+
+    @include tablet-medium {
+      padding: 4rem 2.5rem !important;
+      border-radius: var(--radius-2xl);
+    }
+
+    @include laptop-small {
+      padding: 6rem 4rem !important;
+    }
+  }
+
+
+  :global(.nosotros__cta-title) {
+    color: var(--color-white);
+    margin-bottom: 1.6rem;
+    font-size: 2.4rem;
+    font-weight: var(--font-weight-bold);
+    position: relative;
+    z-index: 1;
+
+    @include tablet-medium {
+      font-size: 2.8rem;
+      margin-bottom: 2rem;
+    }
+
+    @include laptop-small {
+      font-size: 3.6rem;
+    }
+  }
+
+  :global(.nosotros__cta-text) {
+    color: var(--color-gray-300);
+    margin-bottom: 3rem;
+    font-size: 1.6rem;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+    max-width: 70rem;
+    margin-left: auto;
+    margin-right: auto;
+
+    @include tablet-medium {
+      font-size: 1.7rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @include laptop-small {
+      font-size: 2rem;
+      margin-bottom: 4rem;
+    }
+  }
+
+  :global(.nosotros__cta-buttons) {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+
+    @include tablet-medium {
+      flex-direction: row;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    @include laptop-small {
+      gap: 2rem;
+    }
+
+    :global(.btn) {
+      width: 100%;
+
+      @include tablet-medium {
+        width: auto;
+      }
+    }
+  }
+
+  // Estilos específicos para botones en CTA con fondo negro
+  :global(.nosotros__cta-btn-primary) {
+    background-color: var(--color-white) !important;
+    color: var(--color-black) !important;
+    border: 2px solid var(--color-white) !important;
+
+    &:hover {
+      background-color: var(--color-gray-100) !important;
+      color: var(--color-black) !important;
+      border-color: var(--color-gray-100) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2) !important;
+    }
+  }
+
+  :global(.nosotros__cta-btn-secondary) {
+    background-color: var(--color-gray-800) !important;
+    color: var(--color-white) !important;
+    border: 2px solid var(--color-gray-700) !important;
+
+    &:hover {
+      background-color: var(--color-gray-700) !important;
+      color: var(--color-white) !important;
+      border-color: var(--color-gray-600) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3) !important;
+    }
+  }
+</style>
+

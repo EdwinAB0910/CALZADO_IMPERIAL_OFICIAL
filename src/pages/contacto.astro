@@ -1,0 +1,588 @@
+---
+export const prerender = true;
+
+import MainLayout from '../shared/layouts/MainLayout.astro';
+import Input from '../shared/components/atoms/Input/Input.astro';
+import Card from '../shared/components/atoms/Card/Card.astro';
+---
+
+<MainLayout title="Contacto - CALZADO IMPERIAL">
+  <div class="contacto">
+    <!-- Hero Section (Dark) -->
+    <section class="contacto__hero">
+      <div class="contacto__hero-content">
+        <h1 class="contacto__hero-title">
+          ¿Tienes Dudas?
+        </h1>
+        <p class="contacto__hero-subtitle">
+          Estamos aquí para ayudarte. Contacta con nuestro equipo y resolvemos tus preguntas en el menor tiempo posible.
+        </p>
+      </div>
+    </section>
+
+    <!-- Contact Info Cards -->
+    <section class="contacto__info-section">
+      <div class="contacto__info-container">
+        <div class="contacto__info-grid">
+          <!-- Teléfono -->
+          <Card class="contacto__info-card">
+            <div class="contacto__info-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7292C21.7209 20.9841 21.5573 21.2126 21.3522 21.3979C21.1471 21.5832 20.9053 21.7212 20.6441 21.8021C20.3828 21.883 20.1085 21.9049 19.84 21.866C16.7433 21.4951 13.7871 20.3555 11.19 18.556C8.77382 16.9066 6.72533 14.7492 5.18999 12.236C3.57999 9.56798 2.60367 6.54195 2.32999 3.40698C2.28806 3.13916 2.31165 2.86588 2.39864 2.60913C2.48563 2.35237 2.63339 2.11939 2.82999 1.92998C3.02659 1.74058 3.26671 1.60042 3.53027 1.52073C3.79383 1.44104 4.07384 1.42418 4.34599 1.47198C4.58499 1.51398 4.80799 1.60298 5.00199 1.73098C5.19599 1.85898 5.356 2.023 5.472 2.212L7.75 6.012C7.90871 6.29781 7.98548 6.62344 7.97193 6.95158C7.95838 7.27972 7.85497 7.59728 7.673 7.872L5.833 10.28C7.13538 12.7934 9.00623 14.9445 11.288 16.556C13.358 17.998 15.638 18.958 17.994 19.388L20.287 17.208C20.5597 17.0017 20.8815 16.8683 21.222 16.8199C21.5625 16.7715 21.91 16.8097 22.231 16.931L22.243 16.936H22.252L22.262 16.941C22.406 16.996 22.536 17.079 22.644 17.184C22.752 17.289 22.836 17.414 22.891 17.552C22.946 17.689 22.971 17.836 22.964 17.983C22.957 18.13 22.918 18.273 22.85 18.404L22.845 18.414C22.794 18.507 22.731 18.592 22.658 18.667C22.585 18.741 22.502 18.804 22.411 18.854C22.32 18.904 22.222 18.941 22.12 18.964C22.018 18.986 21.913 18.994 21.808 18.988H21.798Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="currentColor"/>
+              </svg>
+            </div>
+            <h3 class="contacto__info-title">Teléfono</h3>
+            <p class="contacto__info-subtitle">Llámanos directamente</p>
+            <p class="contacto__info-text">
+              <a href="tel:+51987654321" class="contacto__info-link">+51 987 654 321</a>
+            </p>
+          </Card>
+
+          <!-- Email -->
+          <Card class="contacto__info-card">
+            <div class="contacto__info-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="currentColor"/>
+                <path d="L22 6L12 13L2 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="contacto__info-title">Email</h3>
+            <p class="contacto__info-subtitle">Escribenos cuando quieras</p>
+            <p class="contacto__info-text">
+              <a href="mailto:contacto@calzadoimperial.com" class="contacto__info-link">contacto@calzadoimperial.com</a>
+            </p>
+          </Card>
+
+          <!-- Ubicación -->
+          <Card class="contacto__info-card">
+            <div class="contacto__info-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="currentColor"/>
+                <path d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="contacto__info-title">Ubicación</h3>
+            <p class="contacto__info-subtitle">Visitanos en persona</p>
+            <p class="contacto__info-text">Av. Javier Prado 123, Lima</p>
+          </Card>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="contacto__form-section">
+      <div class="contacto__form-container">
+        <h2 class="contacto__form-section-title">
+          Envíanos un Mensaje
+        </h2>
+        <p class="contacto__form-section-subtitle">
+          Completa el formulario y nos pondremos en contacto contigo lo antes posible.
+        </p>
+
+        <Card class="contacto__form-card">
+          <form class="contacto__form" id="contact-form">
+            <div class="contacto__form-row">
+              <div class="contacto__form-group">
+                <label for="nombre" class="contacto__label">
+                  Nombre Completo
+                </label>
+                <Input
+                  type="text"
+                  id="nombre"
+                  name="nombre"
+                  placeholder="Tu nombre"
+                  required
+                  class="contacto__input"
+                />
+              </div>
+
+              <div class="contacto__form-group">
+                <label for="email" class="contacto__label">
+                  Email
+                </label>
+                <Input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="tu@correo.com"
+                  required
+                  class="contacto__input"
+                />
+              </div>
+            </div>
+
+            <div class="contacto__form-group">
+              <label for="telefono" class="contacto__label">
+                Teléfono (Opcional)
+              </label>
+              <Input
+                type="text"
+                id="telefono"
+                name="telefono"
+                placeholder="+51 987 654 321"
+                class="contacto__input"
+              />
+            </div>
+
+            <div class="contacto__form-group">
+              <label for="asunto" class="contacto__label">
+                Asunto
+              </label>
+              <Input
+                type="text"
+                id="asunto"
+                name="asunto"
+                placeholder="¿De qué se trata?"
+                required
+                class="contacto__input"
+              />
+            </div>
+
+            <div class="contacto__form-group">
+              <label for="mensaje" class="contacto__label">
+                Mensaje
+              </label>
+              <textarea
+                id="mensaje"
+                name="mensaje"
+                rows="6"
+                placeholder="Cuéntanos cómo podemos ayudarte..."
+                required
+                class="contacto__textarea"
+              ></textarea>
+            </div>
+
+            <button type="submit" class="contacto__submit-btn">
+              Enviar Mensaje
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </form>
+        </Card>
+
+        <p class="contacto__form-promise">
+          Responderemos a tu mensaje en menos de 24 horas. Prometido.
+        </p>
+      </div>
+    </section>
+  </div>
+</MainLayout>
+
+<script>
+  // Manejo del formulario de contacto
+  document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.getElementById('contact-form') as HTMLFormElement | null;
+    if (contactForm) {
+      contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Aquí puedes agregar la lógica para enviar el formulario
+        // Por ahora, solo mostraremos un mensaje de éxito
+        const formData = new FormData(contactForm);
+        const data = Object.fromEntries(formData);
+        
+        console.log('Datos del formulario:', data);
+        
+        // Mostrar mensaje de éxito (puedes mejorar esto con un toast o modal)
+        alert('¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.');
+        contactForm.reset();
+      });
+    }
+  });
+</script>
+
+<style lang="scss">
+  @use '../styles/breakpoints' as *;
+  @use '../styles/mixins' as *;
+
+  .contacto {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  // ============================================================================
+  // Hero Section (Dark)
+  // ============================================================================
+  .contacto__hero {
+    background-color: var(--color-black);
+    padding: 8rem 2rem;
+    text-align: center;
+    color: var(--color-white);
+
+    @include tablet-medium {
+      padding: 10rem 2rem;
+    }
+
+    @include laptop-small {
+      padding: 12rem 2rem;
+    }
+  }
+
+  .contacto__hero-content {
+    max-width: 80rem;
+    margin: 0 auto;
+  }
+
+  .contacto__hero-title {
+    margin: 0 0 2rem 0;
+    color: var(--color-white);
+    font-size: 3.6rem;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+    font-family: var(--font-primary);
+
+    @include tablet-medium {
+      font-size: 4.4rem;
+      margin-bottom: 2.4rem;
+    }
+
+    @include laptop-small {
+      font-size: 4.8rem;
+      margin-bottom: 3rem;
+    }
+  }
+
+  .contacto__hero-subtitle {
+    color: var(--color-gray-300);
+    font-size: 1.6rem;
+    line-height: 1.6;
+    max-width: 70rem;
+    margin: 0 auto;
+    font-family: var(--font-primary);
+
+    @include tablet-medium {
+      font-size: 1.8rem;
+    }
+
+    @include laptop-small {
+      font-size: 2rem;
+    }
+  }
+
+  // ============================================================================
+  // Contact Info Section
+  // ============================================================================
+  .contacto__info-section {
+    background-color: var(--color-white);
+    padding: 6rem 2rem;
+
+    @include tablet-medium {
+      padding: 8rem 2rem;
+    }
+  }
+
+  .contacto__info-container {
+    width: min(90%, 120rem);
+    margin: 0 auto;
+  }
+
+  .contacto__info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+
+    @include tablet-medium {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+    }
+
+    @include laptop-small {
+      gap: 4rem;
+    }
+  }
+
+  :global(.contacto__info-card) {
+    padding: 4rem 2.4rem !important;
+    background: var(--color-gray-50) !important;
+    border: none !important;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+
+    @include tablet-medium {
+      padding: 4.5rem 3rem !important;
+      border-radius: var(--radius-xl);
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      }
+    }
+  }
+
+  .contacto__info-icon {
+    width: 6.4rem;
+    height: 6.4rem;
+    border-radius: 50%;
+    background-color: var(--color-black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    transition: transform 0.3s ease;
+
+    @include tablet-medium {
+      width: 7.2rem;
+      height: 7.2rem;
+      margin-bottom: 2.4rem;
+    }
+
+    svg {
+      width: 2.4rem;
+      height: 2.4rem;
+      color: var(--color-white);
+
+      @include tablet-medium {
+        width: 2.8rem;
+        height: 2.8rem;
+      }
+    }
+  }
+
+  :global(.contacto__info-card):hover .contacto__info-icon {
+    transform: scale(1.1);
+  }
+
+  .contacto__info-title {
+    margin: 0 0 0.8rem 0;
+    color: var(--color-gray-900);
+    font-size: 1.8rem;
+    font-weight: var(--font-weight-bold);
+    font-family: var(--font-primary);
+    line-height: 1.2;
+
+    @include tablet-medium {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .contacto__info-subtitle {
+    margin: 0 0 1.6rem 0;
+    color: var(--color-gray-600);
+    font-size: 1.4rem;
+    line-height: 1.5;
+    font-family: var(--font-primary);
+
+    @include tablet-medium {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+  }
+
+  .contacto__info-text {
+    color: var(--color-gray-900);
+    font-size: 1.6rem;
+    font-weight: var(--font-weight-semibold);
+    margin: 0;
+    line-height: 1.5;
+    font-family: var(--font-primary);
+
+    @include tablet-medium {
+      font-size: 1.7rem;
+    }
+  }
+
+  .contacto__info-link {
+    color: var(--color-gray-900);
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: var(--color-gray-700);
+    }
+  }
+
+  // ============================================================================
+  // Form Section
+  // ============================================================================
+  .contacto__form-section {
+    background-color: var(--color-white);
+    padding: 6rem 2rem 8rem;
+
+    @include tablet-medium {
+      padding: 8rem 2rem 10rem;
+    }
+  }
+
+  .contacto__form-container {
+    width: min(90%, 80rem);
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .contacto__form-section-title {
+    margin: 0 0 1.6rem 0;
+    color: var(--color-gray-900);
+    font-size: 2.8rem;
+    font-weight: var(--font-weight-bold);
+    font-family: var(--font-primary);
+    line-height: 1.2;
+
+    @include tablet-medium {
+      font-size: 3.2rem;
+      margin-bottom: 2rem;
+    }
+
+    @include laptop-small {
+      font-size: 3.6rem;
+    }
+  }
+
+  .contacto__form-section-subtitle {
+    margin: 0 0 4rem 0;
+    color: var(--color-gray-600);
+    font-size: 1.5rem;
+    line-height: 1.6;
+    font-family: var(--font-primary);
+
+    @include tablet-medium {
+      font-size: 1.6rem;
+      margin-bottom: 5rem;
+    }
+  }
+
+  :global(.contacto__form-card) {
+    padding: 4rem 3rem !important;
+    background: var(--color-white) !important;
+    border: none !important;
+    border-radius: var(--radius-xl);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    text-align: left;
+
+    @include tablet-medium {
+      padding: 5rem 4rem !important;
+      border-radius: var(--radius-2xl);
+    }
+  }
+
+  .contacto__form {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+
+    @include tablet-medium {
+      gap: 2.8rem;
+    }
+  }
+
+  .contacto__form-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+
+    @include tablet-medium {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .contacto__form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .contacto__label {
+    font-family: var(--font-primary);
+    font-size: 1.4rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+    display: block;
+
+    @include tablet-medium {
+      font-size: 1.5rem;
+    }
+  }
+
+  .contacto__input,
+  .contacto__textarea {
+    width: 100%;
+    padding: 1.4rem 1.6rem;
+    font-family: var(--font-primary);
+    font-size: 1.6rem;
+    border: 1.5px solid var(--color-gray-300);
+    border-radius: var(--radius);
+    transition: all 0.3s ease;
+    background-color: var(--color-white);
+    resize: vertical;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-gray-900);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+    }
+
+    &::placeholder {
+      color: var(--color-gray-400);
+    }
+  }
+
+  .contacto__textarea {
+    min-height: 14rem;
+    line-height: 1.6;
+    font-family: var(--font-primary);
+  }
+
+  .contacto__submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.6rem 3.2rem;
+    background-color: var(--color-black);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-primary);
+    font-size: 1.6rem;
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+
+    @include tablet-medium {
+      padding: 1.8rem 3.6rem;
+      font-size: 1.7rem;
+    }
+
+    svg {
+      width: 2rem;
+      height: 2rem;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover {
+      background-color: var(--color-gray-800);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+      svg {
+        transform: translateX(4px);
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .contacto__form-promise {
+    margin: 3rem 0 0 0;
+    color: var(--color-gray-600);
+    font-size: 1.4rem;
+    line-height: 1.6;
+    font-family: var(--font-primary);
+
+    @include tablet-medium {
+      font-size: 1.5rem;
+      margin-top: 4rem;
+    }
+  }
+</style>
+

@@ -1,0 +1,639 @@
+---
+import MainLayout from '../../shared/layouts/MainLayout.astro';
+import Image from '../../shared/components/atoms/Image/Image.astro';
+import Heading from '../../shared/components/atoms/Heading/Heading.astro';
+import Text from '../../shared/components/atoms/Text/Text.astro';
+import Button from '../../shared/components/atoms/Button/Button.astro';
+import Input from '../../shared/components/atoms/Input/Input.astro';
+import { getProductById, getProducts } from '../../features/products/services/product.service';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const products = await getProducts();
+  return products.map((product) => ({
+    params: { id: product.id },
+    props: { product },
+  }));
+}
+
+// Obtener el producto de los props o buscarlo dinámicamente
+let product = Astro.props.product;
+
+// Si no está en los props (ruta dinámica en desarrollo), buscarlo por ID
+if (!product && Astro.params.id) {
+  product = await getProductById(Astro.params.id);
+}
+
+if (!product) {
+  return Astro.redirect('/productos');
+}
+---
+
+<MainLayout title={`${product.name} - CALZADO IMPERIAL`}>
+  <div class="page-container">
+    <a href="/productos" class="back-link">← Volver a productos</a>
+    
+    <div class="product-detail">
+      <div class="product-detail__image">
+        <Image
+          src={product.image}
+          alt={product.name}
+          width={600}
+          height={600}
+          loading="eager"
+          class="product-image"
+        />
+      </div>
+
+      <div class="product-detail__content">
+        <Text size="sm" color="muted" class="product-brand">
+          {product.brand}
+        </Text>
+        <Heading level={1} class="product-name">
+          {product.name}
+        </Heading>
+        
+        {product.rating && (
+          <div class="product-rating">
+            <span class="product-stars">
+              {'★'.repeat(Math.round(product.rating))}
+              {'☆'.repeat(5 - Math.round(product.rating))}
+            </span>
+            <Text size="sm" color="muted">
+              {product.rating} ({product.reviews || 0} reseñas)
+            </Text>
+          </div>
+        )}
+
+        <div class="product-price">
+          <Text size="lg" class="product-price-current">
+            S/ {product.price.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </Text>
+          {product.originalPrice && (
+            <Text size="md" color="muted" class="product-price-original">
+              S/ {product.originalPrice.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </Text>
+          )}
+        </div>
+
+        <Text size="md" class="product-description">
+          {product.description}
+        </Text>
+
+        <div class="product-options">
+          <div class="product-option">
+            <Text size="sm" class="product-option-label">
+              Talla:
+            </Text>
+            <select name="size" id="product-size" class="product-select">
+              {product.sizes && product.sizes.length > 0 ? (
+                product.sizes.map((size) => (
+                  <option value={size}>{size}</option>
+                ))
+              ) : (
+                <option value="">No disponible</option>
+              )}
+            </select>
+          </div>
+
+          <div class="product-option">
+            <Text size="sm" class="product-option-label">
+              Color:
+            </Text>
+            <select name="color" id="product-color" class="product-select">
+              {product.colors && product.colors.length > 0 ? (
+                product.colors.map((color) => (
+                  <option value={color}>{color}</option>
+                ))
+              ) : (
+                <option value="">No disponible</option>
+              )}
+            </select>
+          </div>
+
+          <div class="product-option">
+            <Text size="sm" class="product-option-label">
+              Cantidad:
+            </Text>
+            <div class="product-quantity">
+              <button
+                type="button"
+                class="quantity-btn"
+                id="quantity-decrease"
+                aria-label="Disminuir cantidad"
+              >
+                −
+              </button>
+              <span class="quantity-value" id="quantity-display">1</span>
+              <button
+                type="button"
+                class="quantity-btn"
+                id="quantity-increase"
+                aria-label="Aumentar cantidad"
+              >
+                +
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-actions">
+          <button
+            class="product-add-cart btn btn--primary btn--lg"
+            data-product-id={product.id}
+            data-product-name={product.name}
+            data-product-brand={product.brand}
+            data-product-price={product.price}
+            data-product-image={product.image}
+            data-product-category={product.category}
+            data-product-description={product.description}
+            data-product-original-price={product.originalPrice || ''}
+            data-product-stock={product.stock}
+            data-product-rating={product.rating || ''}
+            data-product-reviews={product.reviews || ''}
+            data-product-featured={product.featured || false}
+            data-product-sizes={JSON.stringify(product.sizes)}
+            data-product-colors={JSON.stringify(product.colors)}
+            id="add-to-cart-btn"
+          >
+            Añadir al Carrito
+          </button>
+          <button
+            class="product-buy-now btn btn--outline btn--lg"
+            data-product-id={product.id}
+            data-product-name={product.name}
+            data-product-brand={product.brand}
+            data-product-price={product.price}
+            data-product-image={product.image}
+            data-product-category={product.category}
+            data-product-description={product.description}
+            data-product-original-price={product.originalPrice || ''}
+            data-product-stock={product.stock}
+            data-product-rating={product.rating || ''}
+            data-product-reviews={product.reviews || ''}
+            data-product-featured={product.featured || false}
+            data-product-sizes={JSON.stringify(product.sizes)}
+            data-product-colors={JSON.stringify(product.colors)}
+            id="buy-now-btn"
+          >
+            Comprar Ahora
+          </button>
+        </div>
+
+        <div class="product-info">
+          <div class="product-info-item">
+            <Text size="sm" class="product-info-label">Stock:</Text>
+            <Text size="sm" color={product.stock && product.stock > 10 ? 'default' : 'muted'}>
+              {product.stock && product.stock > 10 ? 'Disponible' : product.stock ? `Solo ${product.stock} disponibles` : 'Consultar disponibilidad'}
+            </Text>
+          </div>
+          <div class="product-info-item">
+            <Text size="sm" class="product-info-label">Categoría:</Text>
+            <Text size="sm">{product.category || 'Sin categoría'}</Text>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</MainLayout>
+
+<style>
+  .page-container {
+    width: min(90%, 120rem);
+    margin: 0 auto;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: 2rem;
+    font-family: var(--font-primary);
+    font-size: 1.6rem;
+    color: var(--color-gray-900);
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .back-link:hover {
+    color: var(--color-gray-700);
+    text-decoration: underline;
+  }
+
+  .product-detail {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 2rem;
+  }
+
+  .product-detail__image {
+    background-color: var(--color-gray-50);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-image {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+  }
+
+  .product-detail__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .product-brand {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .product-name {
+    margin: 0;
+  }
+
+  .product-rating {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .product-stars {
+    color: var(--color-yellow-400);
+    font-size: 1.8rem;
+  }
+
+  .product-price {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+  }
+
+  .product-price-current {
+    font-size: 3.2rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-900);
+  }
+
+  .product-price-original {
+    text-decoration: line-through;
+  }
+
+  .product-description {
+    line-height: 1.8;
+    color: var(--color-gray-700);
+  }
+
+  .product-options {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .product-option {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    flex: 1;
+    min-width: 15rem;
+  }
+
+  .product-option-label {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .product-select {
+    padding: 1.2rem 1.6rem;
+    font-family: var(--font-primary);
+    font-size: 1.6rem;
+    border: 2px solid var(--color-gray-300);
+    border-radius: var(--radius);
+    background-color: var(--color-white);
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+  }
+
+  .product-select:focus {
+    outline: none;
+    border-color: var(--color-gray-900);
+  }
+
+  .product-quantity {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 2px solid var(--color-gray-300);
+    border-radius: var(--radius);
+    padding: 0.4rem;
+    background-color: var(--color-white);
+  }
+
+  .product-quantity .quantity-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.8rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-700);
+    cursor: pointer;
+    width: 3.2rem;
+    height: 3.2rem;
+    min-width: 3.2rem;
+    min-height: 3.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+    font-family: var(--font-primary);
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .product-quantity .quantity-btn:hover {
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-900);
+  }
+
+  .product-quantity .quantity-btn:active {
+    background-color: var(--color-gray-200);
+    transform: scale(0.95);
+  }
+
+  .product-quantity .quantity-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .product-quantity .quantity-value {
+    min-width: 3rem;
+    text-align: center;
+    font-weight: var(--font-weight-semibold);
+    font-size: 1.6rem;
+    font-family: var(--font-primary);
+    display: inline-block;
+    color: var(--color-gray-900);
+  }
+
+  .product-actions {
+    display: flex;
+    gap: 1.6rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+
+  .product-add-cart,
+  .product-buy-now {
+    flex: 1;
+    min-width: 20rem;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .product-buy-now {
+    background: linear-gradient(135deg, var(--color-green-600) 0%, var(--color-green-700) 100%) !important;
+    color: var(--color-white) !important;
+    border: none !important;
+    box-shadow: 0 4px 6px rgba(5, 122, 85, 0.25), 0 2px 4px rgba(5, 122, 85, 0.15) !important;
+  }
+
+  .product-buy-now:hover {
+    background: linear-gradient(135deg, var(--color-green-700) 0%, var(--color-green-800) 100%) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 12px rgba(5, 122, 85, 0.35), 0 4px 6px rgba(5, 122, 85, 0.25) !important;
+  }
+
+  .product-buy-now:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(5, 122, 85, 0.2) !important;
+  }
+
+  .product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-gray-200);
+  }
+
+  .product-info-item {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .product-info-label {
+    font-weight: var(--font-weight-semibold);
+    min-width: 10rem;
+  }
+
+  @media (max-width: 768px) {
+    .product-detail {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .product-options {
+      flex-direction: column;
+    }
+
+    .product-option {
+      min-width: 100%;
+    }
+
+    .product-actions {
+      flex-direction: column;
+    }
+
+    .product-add-cart,
+    .product-buy-now {
+      min-width: 100%;
+    }
+  }
+</style>
+
+<script>
+  import { addToCart } from '../../shared/utils/cart.client.js';
+
+  interface ProductData {
+    id: string;
+    name: string;
+    brand: string;
+    price: number;
+    image: string;
+    category: string;
+    sizes: string[];
+    colors: string[];
+    description?: string;
+    originalPrice?: number;
+    stock?: number;
+    rating?: number;
+    reviews?: number;
+    featured?: boolean;
+  }
+
+  function getProductDataFromButton(button: HTMLElement): ProductData {
+    return {
+      id: button.getAttribute('data-product-id') || '',
+      name: button.getAttribute('data-product-name') || '',
+      brand: button.getAttribute('data-product-brand') || '',
+      price: parseFloat(button.getAttribute('data-product-price') || '0'),
+      image: button.getAttribute('data-product-image') || '',
+      category: button.getAttribute('data-product-category') || '',
+      description: button.getAttribute('data-product-description') || undefined,
+      originalPrice: button.getAttribute('data-product-original-price') 
+        ? parseFloat(button.getAttribute('data-product-original-price') || '0')
+        : undefined,
+      stock: button.getAttribute('data-product-stock') 
+        ? parseInt(button.getAttribute('data-product-stock') || '0', 10)
+        : undefined,
+      rating: button.getAttribute('data-product-rating')
+        ? parseFloat(button.getAttribute('data-product-rating') || '0')
+        : undefined,
+      reviews: button.getAttribute('data-product-reviews')
+        ? parseInt(button.getAttribute('data-product-reviews') || '0', 10)
+        : undefined,
+      featured: button.getAttribute('data-product-featured') === 'true',
+      sizes: JSON.parse(button.getAttribute('data-product-sizes') || '[]'),
+      colors: JSON.parse(button.getAttribute('data-product-colors') || '[]'),
+    };
+  }
+
+  function addProductToCart(button: HTMLElement, redirect: boolean = false) {
+    const sizeSelect = document.getElementById('product-size') as HTMLSelectElement;
+    const colorSelect = document.getElementById('product-color') as HTMLSelectElement;
+    const quantityDisplay = document.getElementById('quantity-display') as HTMLElement;
+    const productData = getProductDataFromButton(button);
+
+    const size = sizeSelect?.value || productData.sizes[0] || '';
+    const color = colorSelect?.value || productData.colors[0] || '';
+    const quantity = quantityDisplay ? parseInt(quantityDisplay.textContent || '1', 10) : 1;
+
+    if (!productData.id || !productData.name) {
+      console.error('Error: Datos del producto incompletos');
+      return;
+    }
+
+    // Validar cantidad
+    const validQuantity = quantity > 0 ? quantity : 1;
+    const maxQuantity = productData.stock || 999;
+    const finalQuantity = Math.min(validQuantity, maxQuantity);
+
+    if (finalQuantity !== validQuantity) {
+      alert(`Solo hay ${maxQuantity} unidades disponibles en stock.`);
+      if (quantityDisplay) {
+        quantityDisplay.textContent = maxQuantity.toString();
+      }
+    }
+
+    try {
+      console.log('Agregando producto al carrito:', productData, 'Cantidad:', finalQuantity);
+      const cart = addToCart(productData as any, finalQuantity, size, color);
+      console.log('Carrito después de agregar:', cart);
+      
+      // Disparar evento de actualización
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+
+      // Mostrar mensaje de éxito
+      const buttonElement = button as HTMLButtonElement;
+      const originalText = buttonElement.textContent || '';
+      buttonElement.textContent = '✓ Agregado';
+      buttonElement.style.backgroundColor = 'var(--color-green-500)';
+      buttonElement.disabled = true;
+
+      if (redirect) {
+        // Esperar un momento para asegurar que se guarde en localStorage
+        setTimeout(() => {
+          console.log('Redirigiendo a carrito...');
+          // Verificar que se guardó correctamente
+          const savedCart = localStorage.getItem('sneakerstore_cart');
+          console.log('Carrito guardado en localStorage:', savedCart);
+          window.location.href = '/carrito';
+        }, 200);
+      } else {
+        setTimeout(() => {
+          buttonElement.textContent = originalText;
+          buttonElement.style.backgroundColor = '';
+          buttonElement.disabled = false;
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Error al agregar al carrito:', error);
+      alert('Error al agregar el producto al carrito. Por favor, intenta de nuevo.');
+    }
+  }
+
+  // Función para inicializar los botones cuando el DOM esté listo
+  function initProductButtons() {
+    // Configurar selector de cantidad
+    const quantityDisplay = document.getElementById('quantity-display');
+    const quantityDecrease = document.getElementById('quantity-decrease');
+    const quantityIncrease = document.getElementById('quantity-increase');
+    const addToCartBtn = document.getElementById('add-to-cart-btn') as HTMLElement;
+    
+    if (!addToCartBtn) {
+      console.error('No se encontró el botón "Añadir al Carrito"');
+      return;
+    }
+    
+    const productData = getProductDataFromButton(addToCartBtn);
+    const maxStock = productData.stock || 999;
+
+    function updateQuantity(change: number) {
+      if (!quantityDisplay) return;
+      const currentQuantity = parseInt(quantityDisplay.textContent || '1', 10);
+      const newQuantity = Math.max(1, Math.min(maxStock, currentQuantity + change));
+      quantityDisplay.textContent = newQuantity.toString();
+      
+      // Actualizar estado de botones
+      if (quantityDecrease) {
+        quantityDecrease.disabled = newQuantity <= 1;
+      }
+      if (quantityIncrease) {
+        quantityIncrease.disabled = newQuantity >= maxStock;
+      }
+    }
+
+    if (quantityDecrease) {
+      quantityDecrease.addEventListener('click', () => updateQuantity(-1));
+      quantityDecrease.disabled = true; // Inicialmente deshabilitado porque empieza en 1
+    }
+
+    if (quantityIncrease) {
+      quantityIncrease.addEventListener('click', () => updateQuantity(1));
+      if (maxStock <= 1) {
+        quantityIncrease.disabled = true;
+      }
+    }
+
+    // Configurar botón "Añadir al Carrito" (ya declarado arriba)
+    addToCartBtn.addEventListener('click', () => {
+      console.log('Click en Añadir al Carrito');
+      addProductToCart(addToCartBtn, false);
+    });
+
+    // Configurar botón "Comprar Ahora"
+    const buyNowBtn = document.getElementById('buy-now-btn');
+    if (buyNowBtn) {
+      buyNowBtn.addEventListener('click', () => {
+        console.log('Click en Comprar Ahora');
+        addProductToCart(buyNowBtn, true);
+      });
+    } else {
+      console.error('No se encontró el botón "Comprar Ahora"');
+    }
+  }
+
+  // Inicializar cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProductButtons);
+  } else {
+    // DOM ya está listo
+    initProductButtons();
+  }
+</script>
+
+

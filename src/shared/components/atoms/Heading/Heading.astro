@@ -1,0 +1,63 @@
+---
+interface Props {
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+  class?: string;
+}
+
+const { level = 1, class: className = '' } = Astro.props;
+
+const Tag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+---
+
+<Tag class={`atom-heading atom-heading--h${level} ${className}`}>
+  <slot />
+</Tag>
+
+<style>
+  .atom-heading {
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-900);
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .atom-heading--h1 {
+    font-size: 4.8rem;
+  }
+
+  .atom-heading--h2 {
+    font-size: 3.6rem;
+  }
+
+  .atom-heading--h3 {
+    font-size: 2.8rem;
+  }
+
+  .atom-heading--h4 {
+    font-size: 2.4rem;
+  }
+
+  .atom-heading--h5 {
+    font-size: 2rem;
+  }
+
+  .atom-heading--h6 {
+    font-size: 1.8rem;
+  }
+
+  @media (max-width: 768px) {
+    .atom-heading--h1 {
+      font-size: 3.6rem;
+    }
+
+    .atom-heading--h2 {
+      font-size: 2.8rem;
+    }
+
+    .atom-heading--h3 {
+      font-size: 2.4rem;
+    }
+  }
+</style>
+

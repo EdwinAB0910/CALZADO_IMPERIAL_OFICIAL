@@ -1,0 +1,67 @@
+---
+export const prerender = true;
+
+import MainLayout from '../../shared/layouts/MainLayout.astro';
+import ProductGrid from '../../features/products/components/organisms/ProductGrid/ProductGrid.astro';
+import Heading from '../../shared/components/atoms/Heading/Heading.astro';
+import Text from '../../shared/components/atoms/Text/Text.astro';
+import { getProducts, searchProducts } from '../../features/products/services/product.service';
+
+const query = Astro.url.searchParams.get('q') || '';
+const products = query ? await searchProducts(query) : await getProducts();
+---
+
+<MainLayout title="Productos - CALZADO IMPERIAL">
+  <div class="page-container">
+    <div class="products-header">
+      <Heading level={1}>Productos</Heading>
+      {query && (
+        <Text size="md" color="muted">
+          Resultados para: "{query}" ({products.length} productos)
+        </Text>
+      )}
+      {!query && (
+        <Text size="md" color="muted">
+          {products.length} productos disponibles
+        </Text>
+      )}
+    </div>
+
+    {products.length > 0 ? (
+      <ProductGrid products={products} />
+    ) : (
+      <div class="no-products">
+        <Heading level={3}>No se encontraron productos</Heading>
+        <Text size="md" color="muted">
+          Intenta con otros términos de búsqueda
+        </Text>
+      </div>
+    )}
+  </div>
+</MainLayout>
+
+<style>
+  .page-container {
+    width: min(90%, 120rem);
+    margin: 0 auto;
+  }
+
+  .products-header {
+    margin-bottom: 4rem;
+    text-align: center;
+  }
+
+  .products-header h1 {
+    margin-bottom: 1.6rem;
+  }
+
+  .no-products {
+    text-align: center;
+    padding: 8rem 2rem;
+  }
+
+  .no-products h3 {
+    margin-bottom: 1.6rem;
+  }
+</style>
+

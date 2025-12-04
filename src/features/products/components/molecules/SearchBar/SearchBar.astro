@@ -1,0 +1,102 @@
+---
+import Input from '../../../../../shared/components/atoms/Input/Input.astro';
+import Button from '../../../../../shared/components/atoms/Button/Button.astro';
+import { Search } from 'lucide-astro';
+---
+
+<form class="molecule-search-bar" method="GET" action="/productos">
+  <div class="search-bar__input-wrapper">
+    <Input
+      type="search"
+      name="q"
+      placeholder="Buscar zapatillas..."
+      class="search-bar__input"
+    />
+    <Search size={20} stroke-width={2} class="search-bar__icon" />
+  </div>
+  <Button type="submit" variant="primary" class="search-bar__button">
+    Buscar
+  </Button>
+</form>
+
+<style lang="scss">
+  @use '@styles/_breakpoints.scss' as *;
+
+  // 🔹 Estilos base (Mobile First) - Pantallas pequeñas
+  .molecule-search-bar {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .search-bar__input-wrapper {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-bar__input {
+    flex: 1;
+    width: 100%;
+    padding-right: 4rem;
+  }
+
+  .search-bar__input :global(input) {
+    width: 100%;
+    padding: 1.4rem 4rem 1.4rem 1.6rem;
+    font-size: 1.6rem;
+    font-family: var(--font-primary);
+    color: var(--color-gray-900);
+    background-color: var(--color-white);
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius);
+    transition: border-color 0.3s ease;
+  }
+
+  .search-bar__input :global(input::placeholder) {
+    color: var(--color-gray-400);
+  }
+
+  .search-bar__input :global(input:focus) {
+    outline: none;
+    border-color: var(--color-gray-500);
+  }
+
+  .search-bar__icon {
+    position: absolute;
+    right: 1.6rem;
+    color: var(--color-gray-400);
+    pointer-events: none;
+  }
+
+  .search-bar__button {
+    flex-shrink: 0;
+    width: auto;
+    white-space: nowrap;
+  }
+
+  .search-bar__button :global(.btn) {
+    background-color: var(--color-black) !important;
+    color: var(--color-white) !important;
+    border: 2px solid var(--color-black) !important;
+    border-radius: var(--radius);
+    padding: 1.4rem 2.4rem;
+    font-size: 1.6rem;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .search-bar__button :global(.btn:hover) {
+    background-color: var(--color-gray-800) !important;
+    border-color: var(--color-gray-800) !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  .search-bar__button :global(.btn::before) {
+    display: none;
+  }
+</style>
+

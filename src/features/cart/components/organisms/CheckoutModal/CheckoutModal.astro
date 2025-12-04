@@ -1,0 +1,851 @@
+---
+import Text from '@components/atoms/Text/Text.astro';
+import Button from '@components/atoms/Button/Button.astro';
+import Input from '@components/atoms/Input/Input.astro';
+---
+
+<div class="checkout-modal" id="checkout-modal">
+  <div class="checkout-modal__overlay" id="checkout-modal-overlay"></div>
+  <div class="checkout-modal__container" id="checkout-modal-container">
+    <div class="checkout-modal__header">
+      <button class="checkout-modal__close" id="checkout-modal-close" aria-label="Cerrar">
+        ✕
+      </button>
+    </div>
+
+    <div class="checkout-modal__content" id="checkout-modal-content">
+      <!-- Formulario de datos personales -->
+      <form class="checkout-form" id="checkout-form">
+        <div class="form-section">
+          <h3 class="section-title">Datos Personales</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="checkout-nombre" class="form-label">
+                Nombre <span class="required">*</span>
+              </label>
+              <Input
+                type="text"
+                id="checkout-nombre"
+                name="nombre"
+                placeholder="Tu nombre"
+                required={true}
+              />
+            </div>
+            <div class="form-group">
+              <label for="checkout-apellidos" class="form-label">
+                Apellidos <span class="required">*</span>
+              </label>
+              <Input
+                type="text"
+                id="checkout-apellidos"
+                name="apellidos"
+                placeholder="Tus apellidos"
+                required={true}
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="checkout-email" class="form-label">
+                Correo Electrónico <span class="required">*</span>
+              </label>
+              <Input
+                type="email"
+                id="checkout-email"
+                name="email"
+                placeholder="tu@email.com"
+                required={true}
+              />
+            </div>
+            <div class="form-group">
+              <label for="checkout-telefono" class="form-label">
+                Teléfono <span class="required">*</span>
+              </label>
+              <Input
+                type="tel"
+                id="checkout-telefono"
+                name="telefono"
+                placeholder="+51 999 999 999"
+                required={true}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">Dirección de Envío</h3>
+          <div class="form-group">
+            <label for="checkout-direccion" class="form-label">
+              Dirección <span class="required">*</span>
+            </label>
+            <Input
+              type="text"
+              id="checkout-direccion"
+              name="direccion"
+              placeholder="Calle, número, departamento, etc."
+              required={true}
+            />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="checkout-distrito" class="form-label">
+                Distrito <span class="required">*</span>
+              </label>
+              <Input
+                type="text"
+                id="checkout-distrito"
+                name="distrito"
+                placeholder="Distrito"
+                required={true}
+              />
+            </div>
+            <div class="form-group">
+              <label for="checkout-ciudad" class="form-label">
+                Ciudad <span class="required">*</span>
+              </label>
+              <Input
+                type="text"
+                id="checkout-ciudad"
+                name="ciudad"
+                placeholder="Ciudad"
+                required={true}
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="checkout-departamento" class="form-label">
+                Departamento/Región <span class="required">*</span>
+              </label>
+              <Input
+                type="text"
+                id="checkout-departamento"
+                name="departamento"
+                placeholder="Departamento o Región"
+                required={true}
+              />
+            </div>
+            <div class="form-group">
+              <label for="checkout-codigo-postal" class="form-label">
+                Código Postal
+              </label>
+              <Input
+                type="text"
+                id="checkout-codigo-postal"
+                name="codigo-postal"
+                placeholder="Código postal (opcional)"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="section-title">Información Adicional</h3>
+          <div class="form-group">
+            <label for="checkout-notas" class="form-label">
+              Notas del Pedido
+            </label>
+            <textarea
+              id="checkout-notas"
+              name="notas"
+              class="form-textarea"
+              placeholder="Instrucciones especiales para la entrega, notas adicionales, etc. (opcional)"
+              rows="3"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button
+            type="button"
+            class="back-button"
+            id="checkout-modal-cancel"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="submit-button"
+            id="submit-order-button"
+          >
+            Confirmar Pedido
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Mensaje de éxito (oculto inicialmente) -->
+  <div class="success-message" id="checkout-success-message" style="display: none;">
+    <div class="success-content">
+      <div class="success-icon">✓</div>
+      <h2 class="success-title" id="success-title">¡Pedido Confirmado!</h2>
+      <Text size="md" class="success-text" id="success-text">
+        Tu pedido ha sido registrado correctamente.
+      </Text>
+      <button
+        type="button"
+        class="success-button"
+        id="checkout-success-close"
+      >
+        Cerrar
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  import {
+    getCart,
+    clearCart,
+  } from '../../../../../shared/utils/cart.client.js';
+
+  function openModal() {
+    const modal = document.getElementById('checkout-modal');
+    const container = document.getElementById('checkout-modal-container');
+    const form = document.getElementById('checkout-form') as HTMLFormElement;
+    const successMessage = document.getElementById('checkout-success-message');
+    const checkoutContent = document.getElementById('checkout-modal-content');
+    
+    if (modal && container) {
+      const cart = getCart();
+      if (!cart || !cart.items || cart.items.length === 0) {
+        alert('Tu carrito está vacío');
+        return;
+      }
+      
+      // Resetear formulario y mensaje de éxito
+      if (form) {
+        form.reset();
+      }
+      if (successMessage) {
+        successMessage.style.display = 'none';
+      }
+      if (checkoutContent) {
+        checkoutContent.style.display = 'block';
+      }
+      
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      
+      // Animar entrada
+      setTimeout(() => {
+        if (container) {
+          container.classList.add('checkout-modal__container--open');
+        }
+      }, 10);
+    }
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('checkout-modal');
+    const container = document.getElementById('checkout-modal-container');
+    const form = document.getElementById('checkout-form') as HTMLFormElement;
+    const successMessage = document.getElementById('checkout-success-message');
+    const checkoutContent = document.getElementById('checkout-modal-content');
+    
+    if (container) {
+      container.classList.remove('checkout-modal__container--open');
+    }
+    
+    setTimeout(() => {
+      if (modal) {
+        modal.style.display = 'none';
+      }
+      document.body.style.overflow = '';
+      
+      // Resetear formulario y mensaje de éxito
+      if (form) {
+        form.reset();
+      }
+      if (successMessage) {
+        successMessage.style.display = 'none';
+      }
+      if (checkoutContent) {
+        checkoutContent.style.display = 'block';
+      }
+    }, 300);
+  }
+
+  // Función para validar email
+  function validateEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  // Función para validar teléfono (permite números, espacios, +, -, paréntesis)
+  function validatePhone(phone: string): boolean {
+    const phoneRegex = /^[\d\s\+\-\(\)]{8,20}$/;
+    return phoneRegex.test(phone.replace(/\s/g, ''));
+  }
+
+  // Función para validar campos del formulario
+  function validateForm(formData: FormData): { isValid: boolean; errors: string[] } {
+    const errors: string[] = [];
+
+    // Validar datos personales
+    const nombre = (formData.get('nombre') as string)?.trim() || '';
+    const apellidos = (formData.get('apellidos') as string)?.trim() || '';
+    const email = (formData.get('email') as string)?.trim() || '';
+    const telefono = (formData.get('telefono') as string)?.trim() || '';
+
+    if (!nombre || nombre.length < 2) {
+      errors.push('El nombre debe tener al menos 2 caracteres');
+    }
+
+    if (!apellidos || apellidos.length < 2) {
+      errors.push('Los apellidos deben tener al menos 2 caracteres');
+    }
+
+    if (!email) {
+      errors.push('El correo electrónico es obligatorio');
+    } else if (!validateEmail(email)) {
+      errors.push('El correo electrónico no tiene un formato válido');
+    }
+
+    if (!telefono) {
+      errors.push('El teléfono es obligatorio');
+    } else if (!validatePhone(telefono)) {
+      errors.push('El teléfono debe tener entre 8 y 20 dígitos');
+    }
+
+    // Validar dirección de envío
+    const direccion = (formData.get('direccion') as string)?.trim() || '';
+    const distrito = (formData.get('distrito') as string)?.trim() || '';
+    const ciudad = (formData.get('ciudad') as string)?.trim() || '';
+    const departamento = (formData.get('departamento') as string)?.trim() || '';
+
+    if (!direccion || direccion.length < 5) {
+      errors.push('La dirección debe tener al menos 5 caracteres');
+    }
+
+    if (!distrito || distrito.length < 2) {
+      errors.push('El distrito es obligatorio');
+    }
+
+    if (!ciudad || ciudad.length < 2) {
+      errors.push('La ciudad es obligatoria');
+    }
+
+    if (!departamento || departamento.length < 2) {
+      errors.push('El departamento/región es obligatorio');
+    }
+
+    // Validar que el carrito tenga items
+    const cart = getCart();
+    if (!cart || !cart.items || cart.items.length === 0) {
+      errors.push('El carrito está vacío');
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+    };
+  }
+
+  async function handleFormSubmit(e: Event) {
+    e.preventDefault();
+    
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const submitButton = document.getElementById('submit-order-button') as HTMLButtonElement;
+    
+    // Validar formulario antes de enviar
+    const validation = validateForm(formData);
+    
+    if (!validation.isValid) {
+      alert('Por favor, corrige los siguientes errores:\n\n' + validation.errors.join('\n'));
+      return;
+    }
+    
+    // Deshabilitar botón mientras se procesa
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Procesando...';
+    }
+
+    const orderData = {
+      personalInfo: {
+        nombre: (formData.get('nombre') as string)?.trim() || '',
+        apellidos: (formData.get('apellidos') as string)?.trim() || '',
+        email: (formData.get('email') as string)?.trim() || '',
+        telefono: (formData.get('telefono') as string)?.trim() || '',
+      },
+      shippingAddress: {
+        direccion: (formData.get('direccion') as string)?.trim() || '',
+        distrito: (formData.get('distrito') as string)?.trim() || '',
+        ciudad: (formData.get('ciudad') as string)?.trim() || '',
+        departamento: (formData.get('departamento') as string)?.trim() || '',
+        codigoPostal: (formData.get('codigo-postal') as string)?.trim() || undefined,
+      },
+      notas: (formData.get('notas') as string)?.trim() || undefined,
+      cart: getCart(),
+    };
+
+    try {
+      // Intentar guardar en la base de datos
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        
+        // También guardar en localStorage como backup
+        const orders = JSON.parse(localStorage.getItem('sneakerstore_orders') || '[]');
+        orders.push({
+          ...orderData,
+          id: result.order?.id || `PED-${Date.now()}`,
+          fecha: new Date().toISOString(),
+        });
+        localStorage.setItem('sneakerstore_orders', JSON.stringify(orders));
+
+        // Obtener el nombre de la persona
+        const nombre = orderData.personalInfo.nombre || '';
+        const nombreCompleto = nombre.trim() || 'Cliente';
+        
+        // Mostrar mensaje de éxito personalizado
+        const checkoutContent = document.getElementById('checkout-modal-content');
+        const successMessage = document.getElementById('checkout-success-message');
+        const successTitle = document.getElementById('success-title');
+        const successText = document.getElementById('success-text');
+        
+        if (checkoutContent) {
+          checkoutContent.style.display = 'none';
+        }
+        if (successMessage) {
+          successMessage.style.display = 'flex';
+        }
+        if (successTitle) {
+          successTitle.textContent = `¡Gracias x su compra ${nombreCompleto}!`;
+        }
+        if (successText) {
+          successText.textContent = 'Tu pedido ha sido registrado correctamente. Te enviaremos un correo con los detalles.';
+        }
+
+        // Limpiar el carrito
+        clearCart();
+        window.dispatchEvent(new CustomEvent('cartUpdated'));
+      } else {
+        throw new Error('Error al guardar el pedido');
+      }
+    } catch (error) {
+      console.error('Error al guardar el pedido:', error);
+      
+      // Fallback: guardar solo en localStorage si falla la BD
+      const orders = JSON.parse(localStorage.getItem('sneakerstore_orders') || '[]');
+      orders.push({
+        ...orderData,
+        id: `PED-${Date.now()}`,
+        fecha: new Date().toISOString(),
+      });
+      localStorage.setItem('sneakerstore_orders', JSON.stringify(orders));
+
+      // Mostrar mensaje de éxito de todas formas
+      const nombre = orderData.personalInfo.nombre || '';
+      const nombreCompleto = nombre.trim() || 'Cliente';
+      
+      const checkoutContent = document.getElementById('checkout-modal-content');
+      const successMessage = document.getElementById('checkout-success-message');
+      const successTitle = document.getElementById('success-title');
+      const successText = document.getElementById('success-text');
+      
+      if (checkoutContent) {
+        checkoutContent.style.display = 'none';
+      }
+      if (successMessage) {
+        successMessage.style.display = 'flex';
+      }
+      if (successTitle) {
+        successTitle.textContent = `¡Gracias x su compra ${nombreCompleto}!`;
+      }
+      if (successText) {
+        successText.textContent = 'Tu pedido ha sido registrado. Te contactaremos pronto.';
+      }
+
+      clearCart();
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+    } finally {
+      // Rehabilitar botón
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Confirmar Pedido';
+      }
+    }
+  }
+
+  function initCheckoutModal() {
+    const modal = document.getElementById('checkout-modal');
+    const closeButton = document.getElementById('checkout-modal-close');
+    const overlay = document.getElementById('checkout-modal-overlay');
+    const cancelButton = document.getElementById('checkout-modal-cancel');
+    const form = document.getElementById('checkout-form') as HTMLFormElement;
+    const successCloseButton = document.getElementById('checkout-success-close');
+    
+    // Ocultar modal inicialmente
+    if (modal) {
+      modal.style.display = 'none';
+    }
+    
+    // Event listeners
+    if (closeButton) {
+      closeButton.addEventListener('click', closeModal);
+    }
+    
+    if (overlay) {
+      overlay.addEventListener('click', closeModal);
+    }
+    
+    if (cancelButton) {
+      cancelButton.addEventListener('click', closeModal);
+    }
+    
+    if (form) {
+      form.addEventListener('submit', handleFormSubmit);
+    }
+    
+    if (successCloseButton) {
+      successCloseButton.addEventListener('click', () => {
+        closeModal();
+        // Recargar página después de cerrar para actualizar el carrito
+        setTimeout(() => {
+          window.location.reload();
+        }, 100);
+      });
+    }
+    
+    // Cerrar con tecla ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('checkout-modal');
+        if (modal && modal.style.display === 'flex') {
+          closeModal();
+        }
+      }
+    });
+    
+    // Exportar función para abrir el modal
+    (window as any).openCheckoutModal = openModal;
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCheckoutModal);
+  } else {
+    initCheckoutModal();
+  }
+</script>
+
+<style is:global>
+  .checkout-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    overflow-y: auto;
+  }
+
+  .checkout-modal__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: -1;
+  }
+
+  .checkout-modal__container {
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 60rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    opacity: 0;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .checkout-modal__container--open {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  .checkout-modal__header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    border-bottom: 2px solid var(--color-gray-200);
+    position: sticky;
+    top: 0;
+    background-color: var(--color-white);
+    z-index: 10;
+  }
+
+  .checkout-modal__close {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: var(--color-gray-600);
+    cursor: pointer;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius);
+    transition: all 0.2s ease;
+  }
+
+  .checkout-modal__close:hover {
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-900);
+  }
+
+  .checkout-modal__content {
+    padding: 2rem;
+  }
+
+  .checkout-form {
+    display: grid;
+    gap: 1.2rem;
+  }
+
+  .form-section {
+    background-color: var(--color-white);
+    border-radius: var(--radius);
+    padding: 1.2rem;
+    border: 1px solid var(--color-gray-200);
+  }
+
+  .section-title {
+    font-size: 1.7rem;
+    font-weight: var(--font-weight-semibold);
+    margin: 0;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid var(--color-gray-200);
+    color: var(--color-gray-900);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .form-group {
+    margin-bottom: 0.8rem;
+  }
+
+  .form-label {
+    display: block;
+    font-family: var(--font-primary);
+    font-size: 1.2rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+    margin-bottom: 0.6rem;
+  }
+
+  .required {
+    color: var(--color-red-600);
+  }
+
+  .checkout-form .atom-input {
+    font-size: 1.4rem;
+    padding: 0.6rem 1.2rem;
+  }
+
+  .checkout-form .atom-input::placeholder {
+    font-size: 1.2rem;
+  }
+
+  .form-textarea {
+    width: 100%;
+    padding: 0.6rem 1.2rem;
+    font-family: var(--font-primary);
+    font-size: 1.4rem;
+    border: 2px solid var(--color-gray-300);
+    border-radius: var(--radius);
+    transition: border-color 0.3s ease;
+    background-color: var(--color-white);
+    resize: vertical;
+  }
+
+  .form-textarea:focus {
+    outline: none;
+    border-color: var(--color-gray-500);
+  }
+
+  .form-textarea::placeholder {
+    color: var(--color-gray-400);
+    font-size: 1.4rem;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 1.2rem;
+    padding-top: 1.2rem;
+    border-top: 2px solid var(--color-gray-200);
+  }
+
+  .back-button,
+  .submit-button {
+    flex: 1;
+    padding: 1.2rem 2rem;
+    border-radius: var(--radius);
+    font-family: var(--font-primary);
+    font-size: 1.4rem;
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+
+  .back-button {
+    background-color: var(--color-white);
+    color: var(--color-gray-700);
+    border-color: var(--color-gray-300);
+  }
+
+  .back-button:hover {
+    background-color: var(--color-gray-50);
+    border-color: var(--color-gray-400);
+  }
+
+  .submit-button {
+    background-color: var(--color-gray-900);
+    color: var(--color-white);
+    border-color: var(--color-gray-900);
+  }
+
+  .submit-button:hover {
+    background-color: var(--color-gray-800);
+    border-color: var(--color-gray-800);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .submit-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+
+  .success-message {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    z-index: 20;
+  }
+
+  .success-content {
+    text-align: center;
+    padding: 2.5rem;
+    max-width: 45rem;
+  }
+
+  .success-icon {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    background-color: var(--color-green-500);
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    margin: 0 auto 1.5rem;
+    font-weight: bold;
+  }
+
+  .success-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--color-green-600);
+  }
+
+  .success-text {
+    margin-bottom: 2rem;
+    color: var(--color-gray-600);
+  }
+
+  .success-button {
+    padding: 1.4rem 3rem;
+    background-color: var(--color-gray-900);
+    color: var(--color-white);
+    border: 2px solid var(--color-gray-900);
+    border-radius: var(--radius);
+    font-family: var(--font-primary);
+    font-size: 1.6rem;
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .success-button:hover {
+    background-color: var(--color-gray-800);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  @media (max-width: 968px) {
+    .checkout-modal__container {
+      max-width: 100%;
+      max-height: 95vh;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .form-actions {
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .checkout-modal {
+      padding: 1rem;
+    }
+
+    .checkout-modal__header {
+      padding: 1.6rem;
+    }
+
+    .checkout-modal__title {
+      font-size: 2rem;
+    }
+
+    .checkout-modal__content {
+      padding: 1.6rem;
+    }
+
+    .success-content {
+      padding: 2rem;
+    }
+  }
+</style>

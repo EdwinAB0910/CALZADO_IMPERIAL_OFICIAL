@@ -1,0 +1,51 @@
+// 📌 Definimos las variables de breakpoints
+$phone-small: 320px;
+$phone: 360px;
+$phone-medium: 375px;
+$phone-large: 414px;
+$phone-landscape: 480px;
+$tablet-small: 620px;
+$tablet-medium: 768px;
+$tablet-large: 900px;
+$tablet-landscape: 1024px;
+$laptop-small: 1200px;
+$laptop-large: 1280px;
+$desktop-small: 1366px;
+$desktop-medium: 1440px;
+$desktop-large: 1920px;
+
+// 📌 Mixin ÚNICO para llamar cualquier variable de breakpoint
+@mixin media($size) {
+  @media (min-width: $size) {
+    @content;
+  }
+}
+
+// 🔹 Teléfonos Pequeños (≥ 320px) → Dispositivos más pequeños como iPhone SE, Galaxy Fold.
+@mixin phone-small { @include media($phone-small) { @content; } }
+// 🔹 Teléfonos Estándar (≥ 360px) → Dispositivos móviles comunes como Galaxy S8, Pixel 3.
+@mixin phone { @include media($phone) { @content; } }
+// 🔹 Teléfonos Medianos (≥ 375px) → iPhone 12 Mini, iPhone X.
+@mixin phone-medium { @include media($phone-medium) { @content; } }
+// 🔹 Teléfonos Grandes (≥ 414px) → iPhone 12/13 Pro Max, dispositivos grandes.
+@mixin phone-large { @include media($phone-large) { @content; } }
+// 🔹 Teléfonos en Modo Horizontal (≥ 480px) → Dispositivos móviles en landscape.
+@mixin phone-landscape { @include media($phone-landscape) { @content; } }
+// 🔹 Tablets Pequeñas (≥ 620px) → Kindle Fire, iPad Mini en vertical.
+@mixin tablet-small { @include media($tablet-small) { @content; } }
+// 🔹 Tablets Medianas (≥ 768px) → iPad estándar en vertical.
+@mixin tablet-medium { @include media($tablet-medium) { @content; } }
+// 🔹 Tablets Grandes (≥ 900px) → iPad Pro 10.5", tablets en modo escritorio.
+@mixin tablet-large { @include media($tablet-large) { @content; } }
+// 🔹 Tablets en Modo Horizontal (≥ 1024px) → iPads en landscape, Surface Go.
+@mixin tablet-landscape { @include media($tablet-landscape) { @content; } }
+// 🔹 Laptops Pequeñas (≥ 1200px) → MacBook Air, ultrabooks pequeños.
+@mixin laptop-small { @include media($laptop-small) { @content; } }
+// 🔹 Laptops Grandes (≥ 1280px) → MacBook Pro 13"-15", laptops estándar.
+@mixin laptop-large { @include media($laptop-large) { @content; } }
+// 🔹 Desktops Pequeños (≥ 1366px) → Monitores estándar en resolución 1366x768.
+@mixin desktop-small { @include media($desktop-small) { @content; } }
+// 🔹 Desktops Medianos (≥ 1440px) → Monitores Full HD comunes.
+@mixin desktop-medium { @include media($desktop-medium) { @content; } }
+// 🔹 Desktops Grandes (≥ 1920px) → Monitores Full HD 1080p o superiores.
+@mixin desktop-large { @include media($desktop-large) { @content; } }

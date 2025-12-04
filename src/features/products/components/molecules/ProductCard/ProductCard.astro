@@ -1,0 +1,265 @@
+---
+import Card from '../../../../../shared/components/atoms/Card/Card.astro';
+import Image from '../../../../../shared/components/atoms/Image/Image.astro';
+import Heading from '../../../../../shared/components/atoms/Heading/Heading.astro';
+import Text from '../../../../../shared/components/atoms/Text/Text.astro';
+import Button from '../../../../../shared/components/atoms/Button/Button.astro';
+import type { Product } from '../../../../../shared/types';
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const discount = product.originalPrice
+  ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+  : 0;
+---
+
+<Card href={`/productos/${product.id}`} class="molecule-product-card">
+  <div class="product-card__image-wrapper">
+    <figure class="product_card__image-container">
+      <Image
+      src={product.image}
+      alt={product.name}
+      loading="lazy"
+      class="product-card__image"
+    />
+    </figure>
+    
+    {discount > 0 && (
+      <span class="product-card__badge">-{discount}%</span>
+    )}
+    {product.featured && (
+      <span class="product-card__featured">Destacado</span>
+    )}
+  </div>
+  <div class="product-card__content">
+    <Text size="sm" color="muted" class="product-card__brand">
+      {product.brand}
+    </Text>
+    <Heading level={4} class="product-card__name">
+      {product.name}
+    </Heading>
+    <div class="product-card__price-wrapper">
+      <Text size="lg" class="product-card__price">
+        S/ {product.price.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </Text>
+      {product.originalPrice && (
+        <Text size="sm" color="muted" class="product-card__original-price">
+          S/ {product.originalPrice.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        </Text>
+      )}
+    </div>
+    {product.rating && (
+      <div class="product-card__rating">
+        <span class="product-card__stars">
+          {'★'.repeat(Math.round(product.rating))}
+          {'☆'.repeat(5 - Math.round(product.rating))}
+        </span>
+        <Text size="sm" color="muted">
+          ({product.reviews || 0})
+        </Text>
+      </div>
+    )}
+    <div class="product-card__stock">
+      <Text size="sm" color={product.stock > 10 ? 'default' : 'muted'}>
+        {product.stock > 10 ? '✓ En stock' : `⚠ Solo ${product.stock} disponibles`}
+      </Text>
+    </div>
+    <span class="product-card__button btn btn--primary btn--md">
+      Ver Detalles
+    </span>
+  </div>
+</Card>
+
+<style lang="scss">
+  .molecule-product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+      border-color: var(--color-gray-300);
+
+      .product-card__image-wrapper {
+        transform: scale(1.05);
+      }
+
+      .product-card__image {
+        transform: scale(1.08);
+      }
+    }
+  }
+
+  .product-card__image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 30rem;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+   
+  }
+  .product_card__image-container{
+    flex: 1;
+    width: 100%;
+    height: 100%;
+  }
+  .product-card__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0;
+    transition: transform 0.5s ease;
+   
+  }
+
+  .product-card__badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: var(--color-red-600);
+    color: var(--color-white);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 1.3rem;
+    font-weight: var(--font-weight-bold);
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(227, 0, 14, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .product-card__featured {
+    // position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background-color: var(--color-yellow-400);
+    color: var(--color-gray-900);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 1.3rem;
+    font-weight: var(--font-weight-bold);
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(239, 212, 2, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .product-card__content {
+   
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 1rem;
+    background-color: var(--color-white);
+  }
+
+  .product-card__brand {
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: var(--font-weight-bold);
+    font-size: 1.2rem;
+    color: var(--color-gray-600);
+    margin-bottom: 0.4rem;
+  }
+
+  .product-card__name {
+    font-size: 1.9rem;
+    margin: 0;
+    flex-grow: 1;
+    line-height: 1.3;
+    color: var(--color-gray-900);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: 0.8rem;
+  }
+
+  .product-card__price-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.8rem;
+  }
+
+  .product-card__price {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-900);
+    font-size: 2.2rem;
+    line-height: 1;
+  }
+
+  .product-card__original-price {
+    text-decoration: line-through;
+    opacity: 0.6;
+    font-size: 1.5rem;
+    color: var(--color-gray-500);
+  }
+
+  .product-card__rating {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+
+    span {
+      font-size: 1.3rem;
+      color: var(--color-gray-600);
+    }
+  }
+
+  .product-card__stars {
+    color: var(--color-yellow-400);
+    font-size: 1.6rem;
+    letter-spacing: 0.1rem;
+    line-height: 1;
+  }
+
+  .product-card__stock {
+    margin-top: 0.2rem;
+    margin-bottom: 0.4rem;
+
+    span {
+      font-size: 1.3rem;
+      font-weight: var(--font-weight-medium);
+    }
+  }
+
+  .product-card__button {
+    width: 100%;
+    margin-top: auto;
+    transition: all 0.3s ease;
+    padding: 1.4rem 2rem;
+    font-size: 1.6rem;
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-md);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    position: relative;
+    z-index: 1;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    }
+  }
+</style>
+
+

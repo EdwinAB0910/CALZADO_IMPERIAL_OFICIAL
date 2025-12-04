@@ -6,9 +6,26 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "db:create-tables": "node scripts/create-tables-sql.js",
+    "db:seed": "npx tsx scripts/seed-products.ts",
+    "db:test": "npx tsx scripts/test-connection.ts",
+    "db:schema": "node scripts/run-schema.js",
+    "db:migration": "node scripts/run-migration.js",
+    "db:migration-simple": "node scripts/run-migration-simple.js",
+    "db:seed-sql": "node scripts/run-seed.js",
+    "db:setup": "npm run db:migration && npm run db:seed-sql",
+    "db:setup-simple": "npm run db:migration-simple && npm run db:seed-sql"
   },
   "dependencies": {
-    "astro": "^5.15.4"
+    "@astrojs/netlify": "^6.6.3",
+    "@astrojs/node": "^9.5.1",
+    "@supabase/supabase-js": "^2.81.1",
+    "add": "^2.0.6",
+    "astro": "^5.15.4",
+    "dotenv": "^17.2.3",
+    "lucide-astro": "^0.553.0",
+    "pg": "^8.16.3",
+    "sass": "^1.93.3"
   }
 }

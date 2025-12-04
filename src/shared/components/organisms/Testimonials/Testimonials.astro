@@ -1,0 +1,180 @@
+---
+interface Testimonial {
+  text: string;
+  author: string;
+  role: string;
+}
+
+const testimonials: Testimonial[] = [
+  {
+    text: "Las zapatillas running son exactamente lo que necesitaba. Comodidad extrema y diseño moderno.",
+    author: "María González",
+    role: "Atleta Profesional"
+  },
+  {
+    text: "La calidad es insuperable. Mis clientes están maravillados con los productos y el servicio.",
+    author: "Carlos Rodríguez",
+    role: "Entrenador"
+  },
+  {
+    text: "Perfecto para usar en la oficina y después en el gimnasio. Versátiles y cómodas.",
+    author: "Ana Martínez",
+    role: "Ejecutiva"
+  }
+];
+---
+
+<section class="testimonials-section">
+  <div class="testimonials__container">
+    <div class="testimonials__header">
+      <h2 class="testimonials__title">Dicen Nuestros Clientes</h2>
+      <p class="testimonials__subtitle">
+        Miles de clientes satisfechos confían en CALZADO IMPERIAL para sus necesidades de calzado.
+      </p>
+    </div>
+    <div class="testimonials__grid">
+      {testimonials.map((testimonial) => (
+        <div class="testimonial-card">
+          <div class="testimonial__stars">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFD700" stroke="#FFD700" stroke-width="1.5">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFD700" stroke="#FFD700" stroke-width="1.5">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFD700" stroke="#FFD700" stroke-width="1.5">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFD700" stroke="#FFD700" stroke-width="1.5">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#FFD700" stroke="#FFD700" stroke-width="1.5">
+              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            </svg>
+          </div>
+          <p class="testimonial__text">
+            "{testimonial.text}"
+          </p>
+          <div class="testimonial__author">
+            <h5 class="testimonial__name">{testimonial.author}</h5>
+            <p class="testimonial__role">{testimonial.role}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+  @use '@styles/_breakpoints.scss' as *;
+
+  .testimonials-section {
+    background-color: var(--color-gray-900);
+    padding: 8rem 0;
+    color: var(--color-white);
+  }
+
+  .testimonials__container {
+    width: min(90%, 120rem);
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .testimonials__header {
+    text-align: center;
+    margin-bottom: 6rem;
+  }
+
+  .testimonials__title {
+    color: var(--color-white);
+    margin: 0 0 1.6rem 0;
+    font-size: 4rem;
+    font-weight: var(--font-weight-bold);
+    font-family: var(--font-primary);
+    line-height: 1.2;
+  }
+
+  .testimonials__subtitle {
+    color: var(--color-gray-400);
+    max-width: 60rem;
+    margin: 0 auto;
+    font-size: 1.8rem;
+    line-height: 1.6;
+    font-family: var(--font-primary);
+  }
+
+  .testimonials__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+  }
+
+  .testimonial-card {
+    background-color: var(--color-gray-800);
+    border: 1px solid var(--color-gray-700);
+    border-radius: var(--radius-lg);
+    padding: 3.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    border-color: var(--color-white);
+  }
+
+  .testimonial__stars {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .testimonial__text {
+    color: var(--color-white);
+    font-size: 1.6rem;
+    line-height: 1.7;
+    flex: 1;
+    margin: 0;
+    font-family: var(--font-primary);
+  }
+
+  .testimonial__author {
+    margin-top: auto;
+  }
+
+  .testimonial__name {
+    color: var(--color-white);
+    font-size: 1.8rem;
+    font-weight: var(--font-weight-bold);
+    margin: 0 0 0.4rem 0;
+    font-family: var(--font-primary);
+    line-height: 1.2;
+  }
+
+  .testimonial__role {
+    color: var(--color-gray-400);
+    font-size: 1.4rem;
+    margin: 0;
+    font-family: var(--font-primary);
+    line-height: 1.5;
+  }
+
+  @include tablet-small {
+    .testimonials__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @include tablet-medium {
+    .testimonials__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .testimonials__title {
+      font-size: 4.8rem;
+    }
+  }
+</style>
+

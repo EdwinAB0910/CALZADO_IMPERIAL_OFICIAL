@@ -1,0 +1,54 @@
+---
+interface Props {
+  type?: 'text' | 'email' | 'password' | 'search' | 'number' | 'tel';
+  name?: string;
+  placeholder?: string;
+  value?: string;
+  required?: boolean;
+  class?: string;
+  id?: string;
+}
+
+const {
+  type = 'text',
+  name,
+  placeholder,
+  value,
+  required = false,
+  class: className = '',
+  id,
+} = Astro.props;
+---
+
+<input
+  type={type}
+  name={name}
+  id={id}
+  placeholder={placeholder}
+  value={value}
+  required={required}
+  class={`atom-input ${className}`}
+/>
+
+<style>
+  .atom-input {
+    width: 100%;
+    padding: 1.2rem 1.6rem;
+    font-family: var(--font-primary);
+    font-size: 1.6rem;
+    border: 2px solid var(--color-gray-300);
+    border-radius: var(--radius);
+    transition: border-color 0.3s ease;
+    background-color: var(--color-white);
+  }
+
+  .atom-input:focus {
+    outline: none;
+    border-color: var(--color-gray-500);
+  }
+
+  .atom-input::placeholder {
+    color: var(--color-gray-400);
+  }
+</style>
+

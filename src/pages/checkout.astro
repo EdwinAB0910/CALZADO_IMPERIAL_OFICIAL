@@ -1,0 +1,686 @@
+---
+export const prerender = true;
+
+import MainLayout from '../shared/layouts/MainLayout.astro';
+import Heading from '../shared/components/atoms/Heading/Heading.astro';
+import Text from '../shared/components/atoms/Text/Text.astro';
+import Button from '../shared/components/atoms/Button/Button.astro';
+import Input from '../shared/components/atoms/Input/Input.astro';
+---
+
+<MainLayout title="Checkout - CALZADO IMPERIAL">
+  <div class="page-container">
+    <div class="checkout-header">
+      <Heading level={1} class="checkout-title">Finalizar Pedido</Heading>
+      <Text size="md" color="muted" class="checkout-subtitle">
+        Completa tus datos para procesar tu pedido
+      </Text>
+    </div>
+
+    <div class="checkout-content" id="checkout-content">
+      <!-- Resumen del pedido -->
+      <div class="checkout-summary" id="checkout-summary">
+        <Heading level={2} class="summary-title">Resumen del Pedido</Heading>
+        <div class="order-items" id="order-items">
+          <!-- Los items se cargarán aquí -->
+        </div>
+        <div class="order-totals">
+          <div class="order-total-row">
+            <Text size="md">Subtotal:</Text>
+            <Text size="md" class="order-value" id="order-subtotal">S/ 0.00</Text>
+          </div>
+          <div class="order-total-row">
+            <Text size="md">Envío:</Text>
+            <Text size="md" class="order-value order-shipping-free">Gratis</Text>
+          </div>
+          <div class="order-total-row order-total-final">
+            <Text size="lg" class="order-label">Total:</Text>
+            <Text size="lg" class="order-value" id="order-total">S/ 0.00</Text>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario de datos personales -->
+      <form class="checkout-form" id="checkout-form">
+        <div class="form-section">
+          <Heading level={2} class="section-title">Datos Personales</Heading>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nombre" class="form-label">
+                Nombre <span class="required">*</span>
+              </label>
+              <Input
+                type="text"
+                id="nombre"
+                name="nombre"
+                placeholder="Tu nombre"
+                required={true}
+              />
+            </div>
+            <div class="form-group">
+              <label for="apellidos" class="form-label">
+                Apellidos <span class="required">*</span>
+              </label>
+              <Input
+                type="text"
+                id="apellidos"
+                name="apellidos"
+                placeholder="Tus apellidos"
+                required={true}
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email" class="form-label">
+                Correo Electrónico <span class="required">*</span>
+              </label>
+              <Input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="tu@email.com"
+                required={true}
+              />
+            </div>
+            <div class="form-group">
+              <label for="telefono" class="form-label">
+                Teléfono <span class="required">*</span>
+              </label>
+              <Input
+                type="tel"
+                id="telefono"
+                name="telefono"
+                placeholder="+51 999 999 999"
+                required={true}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <Heading level={2} class="section-title">Dirección de Envío</Heading>
+          <div class="form-group">
+            <label for="direccion" class="form-label">
+              Dirección <span class="required">*</span>
+            </label>
+            <Input
+              type="text"
+              id="direccion"
+              name="direccion"
+              placeholder="Calle, número, departamento, etc."
+              required={true}
+            />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="distrito" class="form-label">
+                Distrito <span class="required">*</span>
+              </label>
+              <Input
+                type="text"
+                id="distrito"
+                name="distrito"
+                placeholder="Distrito"
+                required={true}
+              />
+            </div>
+            <div class="form-group">
+              <label for="ciudad" class="form-label">
+                Ciudad <span class="required">*</span>
+              </label>
+              <Input
+                type="text"
+                id="ciudad"
+                name="ciudad"
+                placeholder="Ciudad"
+                required={true}
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="departamento" class="form-label">
+                Departamento/Región <span class="required">*</span>
+              </label>
+              <Input
+                type="text"
+                id="departamento"
+                name="departamento"
+                placeholder="Departamento o Región"
+                required={true}
+              />
+            </div>
+            <div class="form-group">
+              <label for="codigo-postal" class="form-label">
+                Código Postal
+              </label>
+              <Input
+                type="text"
+                id="codigo-postal"
+                name="codigo-postal"
+                placeholder="Código postal (opcional)"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <Heading level={2} class="section-title">Información Adicional</Heading>
+          <div class="form-group">
+            <label for="notas" class="form-label">
+              Notas del Pedido
+            </label>
+            <textarea
+              id="notas"
+              name="notas"
+              class="form-textarea"
+              placeholder="Instrucciones especiales para la entrega, notas adicionales, etc. (opcional)"
+              rows="4"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <Button
+            href="/carrito"
+            variant="secondary"
+            size="lg"
+            type="button"
+            class="back-button"
+          >
+            Volver al Carrito
+          </Button>
+          <button
+            type="submit"
+            class="submit-button"
+            id="submit-order-button"
+          >
+            Confirmar Pedido
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Mensaje de éxito (oculto inicialmente) -->
+  <div class="success-message" id="success-message" style="display: none;">
+    <div class="success-content">
+      <div class="success-icon">✓</div>
+      <Heading level={2} class="success-title">¡Pedido Confirmado!</Heading>
+      <Text size="md" class="success-text">
+        Tu pedido ha sido registrado correctamente. Te enviaremos un correo con los detalles.
+      </Text>
+      <Button href="/" variant="primary" size="lg">
+        Volver al Inicio
+      </Button>
+    </div>
+  </div>
+</MainLayout>
+
+<script>
+  import {
+    getCart,
+    formatPrice,
+    clearCart,
+  } from '../shared/utils/cart.client.js';
+
+  function formatPriceHelper(price: number): string {
+    return `S/ ${price.toLocaleString('es-PE', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+  }
+
+  function loadOrderSummary() {
+    const cart = getCart();
+    const orderItemsContainer = document.getElementById('order-items');
+    const orderSubtotal = document.getElementById('order-subtotal');
+    const orderTotal = document.getElementById('order-total');
+    const checkoutContent = document.getElementById('checkout-content');
+
+    if (!cart || !cart.items || cart.items.length === 0) {
+      // Si el carrito está vacío, redirigir al carrito
+      window.location.href = '/carrito';
+      return;
+    }
+
+    const priceFunc = typeof formatPrice === 'function' ? formatPrice : formatPriceHelper;
+
+    // Mostrar items del pedido
+    if (orderItemsContainer) {
+      orderItemsContainer.innerHTML = cart.items.map((item: any) => {
+        const product = item.product || {};
+        const itemTotal = (product.price || 0) * (item.quantity || 1);
+        
+        return `
+          <div class="order-item">
+            <div class="order-item__image">
+              <img src="${product.image || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=200&fit=crop'}" 
+                   alt="${product.name || 'Producto'}" />
+            </div>
+            <div class="order-item__details">
+              <p class="order-item__name">${product.name || 'Producto'}</p>
+              <p class="order-item__brand">${product.brand || 'Sin marca'}</p>
+              <p class="order-item__options">
+                ${item.size ? `Talla: ${item.size} | ` : ''}
+                ${item.color ? `Color: ${item.color} | ` : ''}
+                Cantidad: ${item.quantity || 1}
+              </p>
+            </div>
+            <div class="order-item__price">
+              ${priceFunc(itemTotal)}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Actualizar totales
+    if (orderSubtotal) {
+      orderSubtotal.textContent = priceFunc(cart.total || 0);
+    }
+    if (orderTotal) {
+      orderTotal.textContent = priceFunc(cart.total || 0);
+    }
+  }
+
+  function handleFormSubmit(e: Event) {
+    e.preventDefault();
+    
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const orderData: any = {
+      personalInfo: {
+        nombre: formData.get('nombre'),
+        apellidos: formData.get('apellidos'),
+        email: formData.get('email'),
+        telefono: formData.get('telefono'),
+      },
+      shippingAddress: {
+        direccion: formData.get('direccion'),
+        distrito: formData.get('distrito'),
+        ciudad: formData.get('ciudad'),
+        departamento: formData.get('departamento'),
+        codigoPostal: formData.get('codigo-postal'),
+      },
+      notas: formData.get('notas') || '',
+      cart: getCart(),
+      fecha: new Date().toISOString(),
+    };
+
+    // Aquí podrías enviar los datos a tu servidor/API
+    console.log('Datos del pedido:', orderData);
+
+    // Guardar el pedido en localStorage (temporalmente)
+    const orders = JSON.parse(localStorage.getItem('sneakerstore_orders') || '[]');
+    orders.push({
+      ...orderData,
+      id: `PED-${Date.now()}`,
+    });
+    localStorage.setItem('sneakerstore_orders', JSON.stringify(orders));
+
+    // Mostrar mensaje de éxito
+    const checkoutContent = document.getElementById('checkout-content');
+    const successMessage = document.getElementById('success-message');
+    
+    if (checkoutContent) {
+      checkoutContent.style.display = 'none';
+    }
+    if (successMessage) {
+      successMessage.style.display = 'flex';
+    }
+
+    // Limpiar el carrito
+    clearCart();
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
+
+    // Scroll al mensaje de éxito
+    successMessage?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function initCheckout() {
+    loadOrderSummary();
+    
+    const form = document.getElementById('checkout-form') as HTMLFormElement;
+    if (form) {
+      form.addEventListener('submit', handleFormSubmit);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCheckout);
+  } else {
+    initCheckout();
+  }
+</script>
+
+<style is:global>
+  .page-container {
+    width: min(90%, 120rem);
+    margin: 0 auto;
+    padding: 2rem 0;
+  }
+
+  .checkout-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .checkout-title {
+    font-size: 3.2rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .checkout-subtitle {
+    font-size: 1.6rem;
+  }
+
+  .checkout-content {
+    display: grid;
+    grid-template-columns: 1fr 40rem;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .checkout-form {
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: 2.4rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-gray-200);
+  }
+
+  .checkout-summary {
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: 2.4rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-gray-200);
+    position: sticky;
+    top: 10rem;
+    height: fit-content;
+  }
+
+  .summary-title {
+    font-size: 2rem;
+    margin-bottom: 1.6rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--color-gray-200);
+  }
+
+  .order-items {
+    margin-bottom: 1.6rem;
+    max-height: 40rem;
+    overflow-y: auto;
+  }
+
+  .order-item {
+    display: flex;
+    gap: 1.2rem;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+
+  .order-item:last-child {
+    border-bottom: none;
+  }
+
+  .order-item__image {
+    width: 8rem;
+    height: 8rem;
+    flex-shrink: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background-color: var(--color-gray-50);
+  }
+
+  .order-item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .order-item__details {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .order-item__name {
+    font-size: 1.4rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+    margin-bottom: 0.4rem;
+  }
+
+  .order-item__brand {
+    font-size: 1.2rem;
+    color: var(--color-gray-600);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .order-item__options {
+    font-size: 1.2rem;
+    color: var(--color-gray-600);
+  }
+
+  .order-item__price {
+    font-size: 1.5rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-900);
+    align-self: flex-start;
+  }
+
+  .order-totals {
+    padding-top: 1.6rem;
+    border-top: 2px solid var(--color-gray-300);
+  }
+
+  .order-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.4rem 0;
+  }
+
+  .order-value {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+  }
+
+  .order-shipping-free {
+    color: var(--color-green-600);
+  }
+
+  .order-total-final {
+    padding-top: 1rem;
+    border-top: 2px solid var(--color-gray-300);
+    margin-top: 1rem;
+  }
+
+  .order-label {
+    font-weight: var(--font-weight-bold);
+  }
+
+  .form-section {
+    margin-bottom: 3rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 1.6rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--color-gray-200);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.6rem;
+    margin-bottom: 1.6rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.6rem;
+  }
+
+  .form-label {
+    display: block;
+    font-family: var(--font-primary);
+    font-size: 1.4rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+    margin-bottom: 0.8rem;
+  }
+
+  .required {
+    color: var(--color-red-600);
+  }
+
+  .form-textarea {
+    width: 100%;
+    padding: 1.2rem 1.6rem;
+    font-family: var(--font-primary);
+    font-size: 1.6rem;
+    border: 2px solid var(--color-gray-300);
+    border-radius: var(--radius);
+    transition: border-color 0.3s ease;
+    background-color: var(--color-white);
+    resize: vertical;
+  }
+
+  .form-textarea:focus {
+    outline: none;
+    border-color: var(--color-gray-500);
+  }
+
+  .form-textarea::placeholder {
+    color: var(--color-gray-400);
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 1.6rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--color-gray-200);
+  }
+
+  .back-button {
+    flex: 1;
+  }
+
+  .submit-button {
+    flex: 2;
+    padding: 1.4rem 2rem;
+    background-color: var(--color-gray-900);
+    color: var(--color-white);
+    border: 2px solid var(--color-gray-900);
+    border-radius: var(--radius);
+    font-family: var(--font-primary);
+    font-size: 1.6rem;
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .submit-button:hover {
+    background-color: var(--color-gray-800);
+    border-color: var(--color-gray-800);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .submit-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
+
+  .success-message {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    padding: 4rem 2rem;
+  }
+
+  .success-content {
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: 4rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 50rem;
+    border: 2px solid var(--color-green-500);
+  }
+
+  .success-icon {
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    background-color: var(--color-green-500);
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    margin: 0 auto 2rem;
+    font-weight: bold;
+  }
+
+  .success-title {
+    font-size: 2.4rem;
+    margin-bottom: 1.2rem;
+    color: var(--color-green-600);
+  }
+
+  .success-text {
+    margin-bottom: 2.4rem;
+    color: var(--color-gray-600);
+  }
+
+  @media (max-width: 968px) {
+    .checkout-content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .checkout-summary {
+      position: static;
+      order: -1;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .form-actions {
+      flex-direction: column;
+    }
+
+    .back-button,
+    .submit-button {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .checkout-title {
+      font-size: 2.4rem;
+    }
+
+    .checkout-form,
+    .checkout-summary {
+      padding: 1.6rem;
+    }
+
+    .success-content {
+      padding: 2.4rem;
+    }
+  }
+</style>
+
+

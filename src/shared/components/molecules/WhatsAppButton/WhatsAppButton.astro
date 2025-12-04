@@ -1,0 +1,78 @@
+---
+import { MessageCircle, Phone } from 'lucide-astro';
+
+interface Props {
+  phoneNumber?: string;
+  message?: string;
+  class?: string;
+}
+
+const { 
+  phoneNumber = '51970490693', // Número por defecto (formato internacional sin +)
+  message = 'Hola, me interesa conocer más sobre sus productos',
+  class: className = '',
+} = Astro.props;
+
+// Construir URL de WhatsApp
+const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+---
+
+<a 
+  href={whatsappUrl}
+  target="_blank"
+  rel="noopener noreferrer"
+  class={`whatsapp-button ${className}`}
+  aria-label="Contactar por WhatsApp"
+  title="Contáctanos por WhatsApp"
+>
+  <MessageCircle class="whatsapp-icon" size={32} stroke-width={2.5} />
+</a>
+
+<style>
+  .whatsapp-button {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    width: 60px;
+    height: 60px;
+    background-color: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+    transition: all 0.3s ease;
+    z-index: 999;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .whatsapp-button:hover {
+    background-color: #20BA5A;
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+  }
+
+  .whatsapp-button:active {
+    transform: scale(0.95);
+  }
+
+  .whatsapp-icon {
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .whatsapp-button {
+      width: 56px;
+      height: 56px;
+      bottom: 1rem;
+      right: 1rem;
+    }
+
+    .whatsapp-icon {
+      width: 28px;
+      height: 28px;
+    }
+  }
+</style>
+

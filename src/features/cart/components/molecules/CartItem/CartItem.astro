@@ -1,0 +1,223 @@
+---
+import Image from '../../../../../shared/components/atoms/Image/Image.astro';
+import Text from '../../../../../shared/components/atoms/Text/Text.astro';
+import Button from '../../../../../shared/components/atoms/Button/Button.astro';
+import type { CartItem as CartItemType } from '../../../../../shared/types';
+
+interface Props {
+  item: CartItemType;
+  itemId: string;
+}
+
+const { item, itemId } = Astro.props;
+---
+
+<div class="cart-item" data-item-id={itemId}>
+  <div class="cart-item__image">
+    <Image
+      src={item.product.image}
+      alt={item.product.name}
+      width={120}
+      height={120}
+      loading="lazy"
+    />
+  </div>
+  <div class="cart-item__details">
+    <Text size="md" class="cart-item__name">{item.product.name}</Text>
+    <Text size="sm" color="muted" class="cart-item__brand">{item.product.brand}</Text>
+    <div class="cart-item__options">
+      <Text size="sm" color="muted">Talla: {item.size}</Text>
+      <Text size="sm" color="muted">Color: {item.color}</Text>
+    </div>
+    <div class="cart-item__price">
+      <Text size="md" class="cart-item__unit-price">
+        S/ {item.product.price.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </Text>
+    </div>
+  </div>
+  <div class="cart-item__actions">
+    <div class="cart-item__quantity">
+      <button
+        class="quantity-btn"
+        data-action="decrease"
+        data-item-id={itemId}
+        aria-label="Disminuir cantidad"
+      >
+        −
+      </button>
+      <span class="quantity-value" data-item-id={itemId}>
+        {item.quantity}
+      </span>
+      <button
+        class="quantity-btn"
+        data-action="increase"
+        data-item-id={itemId}
+        aria-label="Aumentar cantidad"
+      >
+        +
+      </button>
+    </div>
+    <div class="cart-item__total">
+      <Text size="lg" class="cart-item__total-price">
+        S/ {(item.product.price * item.quantity).toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </Text>
+    </div>
+    <button
+      class="cart-item__remove"
+      data-action="remove"
+      data-item-id={itemId}
+      aria-label="Eliminar producto"
+    >
+      🗑️
+    </button>
+  </div>
+</div>
+
+<style>
+  .cart-item {
+    display: grid;
+    grid-template-columns: 12rem 1fr auto;
+    gap: 2rem;
+    padding: 2rem;
+    border-bottom: 1px solid var(--color-gray-200);
+    align-items: start;
+  }
+
+  .cart-item__image {
+    width: 12rem;
+    height: 12rem;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background-color: var(--color-gray-50);
+  }
+
+  .cart-item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cart-item__details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .cart-item__name {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-gray-900);
+  }
+
+  .cart-item__brand {
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 1.2rem;
+  }
+
+  .cart-item__options {
+    display: flex;
+    gap: 1.6rem;
+    margin-top: 0.4rem;
+  }
+
+  .cart-item__price {
+    margin-top: 0.8rem;
+  }
+
+  .cart-item__unit-price {
+    color: var(--color-gray-600);
+  }
+
+  .cart-item__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1.6rem;
+  }
+
+  .cart-item__quantity {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: 2px solid var(--color-gray-300);
+    border-radius: var(--radius);
+    padding: 0.4rem;
+  }
+
+  .quantity-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-700);
+    cursor: pointer;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+  }
+
+  .quantity-btn:hover {
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-900);
+  }
+
+  .quantity-value {
+    min-width: 3rem;
+    text-align: center;
+    font-weight: var(--font-weight-semibold);
+    font-size: 1.6rem;
+  }
+
+  .cart-item__total {
+    text-align: right;
+  }
+
+  .cart-item__total-price {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-gray-900);
+  }
+
+  .cart-item__remove {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0.8rem;
+    border-radius: var(--radius);
+    transition: all 0.2s ease;
+    opacity: 0.6;
+  }
+
+  .cart-item__remove:hover {
+    opacity: 1;
+    background-color: var(--color-red-50);
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 768px) {
+    .cart-item {
+      grid-template-columns: 10rem 1fr;
+      gap: 1.6rem;
+    }
+
+    .cart-item__actions {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--color-gray-200);
+    }
+
+    .cart-item__image {
+      width: 10rem;
+      height: 10rem;
+    }
+  }
+</style>
+
