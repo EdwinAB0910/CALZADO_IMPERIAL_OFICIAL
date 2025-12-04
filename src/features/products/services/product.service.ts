@@ -46,7 +46,7 @@ function mapSupabaseToProduct(dbProduct: SupabaseProduct): Product {
 // Cache de productos para evitar múltiples llamadas
 let productsCache: Product[] | null = null;
 let cacheTimestamp: number = 0;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
+const CACHE_DURATION = 5 * 1000; // 5 segundos
 
 export async function getProducts(): Promise<Product[]> {
   const supabase = getSupabaseClient();
@@ -399,11 +399,11 @@ export async function getProductsByCategory(category: string): Promise<Product[]
       .from('categories')
       .select('id')
       .eq('name', category)
-      .single();
+      .maybeSingle(); // Usar maybeSingle() para manejar cuando no existe
 
     if (categoryError || !categoryData) {
-      console.error(`Error al buscar categoría ${category}:`, categoryError);
-      return getStaticProducts().filter((p) => p.category === category);
+      console.warn(`Categoría "${category}" no encontrada en la base de datos`);
+      return []; // Retornar array vacío si la categoría no existe
     }
 
     // Ahora obtener los productos por category_id
