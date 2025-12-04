@@ -10,7 +10,11 @@ interface SupabaseProduct {
   original_price: number | null;
   image: string;
   description: string | null;
-  category: string;
+  category_id: string;
+  category?: {
+    id: string;
+    name: string;
+  };
   sizes: string[];
   colors: string[];
   stock: number;
@@ -29,7 +33,7 @@ function mapSupabaseToProduct(dbProduct: SupabaseProduct): Product {
     originalPrice: dbProduct.original_price ? Number(dbProduct.original_price) : undefined,
     image: dbProduct.image,
     description: dbProduct.description || '',
-    category: dbProduct.category,
+    category: dbProduct.category?.name || '',
     sizes: dbProduct.sizes || [],
     colors: dbProduct.colors || [],
     stock: dbProduct.stock,
@@ -59,7 +63,7 @@ export async function getProducts(): Promise<Product[]> {
   }
 
   try {
-    // Obtener productos con sus relaciones de tallas y colores
+    // Obtener productos
     const { data, error } = await supabase
       .from('products')
       .select(`
@@ -70,7 +74,6 @@ export async function getProducts(): Promise<Product[]> {
         original_price,
         image,
         description,
-        category,
         category_id,
         stock,
         rating,
@@ -91,6 +94,18 @@ export async function getProducts(): Promise<Product[]> {
       console.warn('No se encontraron productos en Supabase, usando datos estáticos');
       return getStaticProducts();
     }
+
+    // Obtener todas las categorías únicas
+    const categoryIds = [...new Set(data.map((p: any) => p.category_id).filter(Boolean))];
+    const { data: categoriesData } = await supabase
+      .from('categories')
+      .select('id, name')
+      .in('id', categoryIds);
+
+    // Crear un mapa de categorías para acceso rápido
+    const categoriesMap = new Map(
+      (categoriesData || []).map((cat: any) => [cat.id, cat.name])
+    );
 
     // Para cada producto, obtener tallas y colores de las tablas separadas
     const productsWithRelations = await Promise.all(
@@ -137,8 +152,12 @@ export async function getProducts(): Promise<Product[]> {
           colors.push(...(Array.isArray(product.colors) ? product.colors : []));
         }
 
+        // Obtener nombre de categoría
+        const categoryName = product.category_id ? categoriesMap.get(product.category_id) : undefined;
+
         return {
           ...product,
+          category: categoryName ? { id: product.category_id, name: categoryName } : undefined,
           sizes,
           colors
         };
@@ -164,12 +183,12 @@ export async function getProductById(id: string): Promise<Product | undefined> {
   if (!supabase) {
     return getStaticProducts().find((p) => p.id === id);
   }
-
+ 
   try {
     // Primero obtener el producto
     const { data: productData, error: productError } = await supabase
       .from('products')
-      .select('id, name, brand, price, original_price, image, description, category, stock, rating, reviews, featured')
+      .select('id, name, brand, price, original_price, image, description, category_id, stock, rating, reviews, featured, sizes, colors')
       .eq('id', id)
       .single();
 
@@ -177,6 +196,17 @@ export async function getProductById(id: string): Promise<Product | undefined> {
       console.error(`Error al cargar producto ${id} desde Supabase:`, productError);
       // Fallback a datos estáticos
       return getStaticProducts().find((p) => p.id === id);
+    }
+
+    // Obtener la categoría
+    let categoryName: string | undefined;
+    if (productData.category_id) {
+      const { data: categoryData } = await supabase
+        .from('categories')
+        .select('name')
+        .eq('id', productData.category_id)
+        .single();
+      categoryName = categoryData?.name;
     }
 
     // Obtener tallas relacionadas - consulta directa
@@ -224,6 +254,7 @@ export async function getProductById(id: string): Promise<Product | undefined> {
     // Combinar datos
     const productWithRelations = {
       ...productData,
+      category: categoryName ? { id: productData.category_id, name: categoryName } : undefined,
       sizes,
       colors
     };
@@ -250,7 +281,7 @@ export async function getFeaturedProducts(): Promise<Product[]> {
       .from('products')
       .select('*')
       .eq('featured', true)
-      .order('created_at', { ascending: false });
+      .order('name', { ascending: true });
 
     if (error) {
       console.error('Error al cargar productos destacados desde Supabase:', error);
@@ -261,7 +292,26 @@ export async function getFeaturedProducts(): Promise<Product[]> {
       return [];
     }
 
-    return data.map(mapSupabaseToProduct);
+    // Obtener categorías para los productos destacados
+    const categoryIds = [...new Set(data.map((p: any) => p.category_id).filter(Boolean))];
+    const { data: categoriesData } = await supabase
+      .from('categories')
+      .select('id, name')
+      .in('id', categoryIds);
+
+    const categoriesMap = new Map(
+      (categoriesData || []).map((cat: any) => [cat.id, cat.name])
+    );
+
+    // Mapear productos con sus categorías
+    const productsWithCategories = data.map((product: any) => ({
+      ...product,
+      category: product.category_id && categoriesMap.has(product.category_id)
+        ? { id: product.category_id, name: categoriesMap.get(product.category_id)! }
+        : undefined
+    }));
+
+    return productsWithCategories.map(mapSupabaseToProduct);
   } catch (error) {
     console.error('Error al conectar con Supabase para productos destacados:', error);
     return getStaticProducts().filter((p) => p.featured);
@@ -303,7 +353,26 @@ export async function searchProducts(query: string): Promise<Product[]> {
       return [];
     }
 
-    return data.map(mapSupabaseToProduct);
+    // Obtener categorías para los productos encontrados
+    const categoryIds = [...new Set(data.map((p: any) => p.category_id).filter(Boolean))];
+    const { data: categoriesData } = await supabase
+      .from('categories')
+      .select('id, name')
+      .in('id', categoryIds);
+
+    const categoriesMap = new Map(
+      (categoriesData || []).map((cat: any) => [cat.id, cat.name])
+    );
+
+    // Mapear productos con sus categorías
+    const productsWithCategories = data.map((product: any) => ({
+      ...product,
+      category: product.category_id && categoriesMap.has(product.category_id)
+        ? { id: product.category_id, name: categoriesMap.get(product.category_id)! }
+        : undefined
+    }));
+
+    return productsWithCategories.map(mapSupabaseToProduct);
   } catch (error) {
     console.error('Error al conectar con Supabase para búsqueda:', error);
     // Fallback a búsqueda estática
@@ -325,11 +394,24 @@ export async function getProductsByCategory(category: string): Promise<Product[]
   }
 
   try {
+    // Primero obtener el ID de la categoría por su nombre
+    const { data: categoryData, error: categoryError } = await supabase
+      .from('categories')
+      .select('id')
+      .eq('name', category)
+      .single();
+
+    if (categoryError || !categoryData) {
+      console.error(`Error al buscar categoría ${category}:`, categoryError);
+      return getStaticProducts().filter((p) => p.category === category);
+    }
+
+    // Ahora obtener los productos por category_id
     const { data, error } = await supabase
       .from('products')
       .select('*')
-      .eq('category', category)
-      .order('created_at', { ascending: false });
+      .eq('category_id', categoryData.id)
+      .order('name', { ascending: true });
 
     if (error) {
       console.error(`Error al cargar productos de categoría ${category} desde Supabase:`, error);
@@ -340,7 +422,13 @@ export async function getProductsByCategory(category: string): Promise<Product[]
       return [];
     }
 
-    return data.map(mapSupabaseToProduct);
+    // Mapear productos con la categoría
+    const productsWithCategories = data.map((product: any) => ({
+      ...product,
+      category: { id: categoryData.id, name: category }
+    }));
+
+    return productsWithCategories.map(mapSupabaseToProduct);
   } catch (error) {
     console.error(`Error al conectar con Supabase para categoría ${category}:`, error);
     return getStaticProducts().filter((p) => p.category === category);
